@@ -5,7 +5,6 @@ The CS program has a GCE
 
 # Configure your environment
 
-1. The Kubernetes Engine API is already enabled for the project.
 1. Install `gcloud` via its [install page](https://cloud.google.com/sdk/install)
 1. Run `gcloud init` and log in to the Rhodes CS project.
 1. Install `kubectl` by running `gcloud components install kubectl`.
@@ -23,6 +22,8 @@ guide](https://zero-to-jupyterhub.readthedocs.io/en/latest/).
 
 Outside of the guide, there are a few cloud resources that I manually set up.
 
+* Appropriate APIs are already enabled for the project (GKE, logging,
+  containers, etc.).
 * There's a static external IP address provisioned that is in use by the
   cluster's proxy server. This is configured in `config/config.yaml`. You can
   see this
