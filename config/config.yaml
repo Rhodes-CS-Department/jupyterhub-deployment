@@ -1,0 +1,82 @@
+proxy:
+  secretToken: "***REMOVED***"
+  # Use static IP
+  service:
+    loadBalancerIP: 35.225.189.212
+  https:
+    enabled: true
+    hosts:
+      - rhodes-py.org
+    letsencrypt:
+      contactEmail: langma@gmail.com
+
+singleuser:
+  image:
+    # Configured for Rhodes with required libraries installed.
+    name: gcr.io/rhodes-cs/jserver
+    # May want to settle on a stable version and allow development branches.
+    tag: latest
+  # user resource limits
+  memory:
+    limit: 1G
+    guarantee: 1G
+  cpu:
+    limit: 0.25
+    guarantee: 0.25
+  storage:
+    capacity: 1Gi
+
+  # sorry.
+  extraEnv:
+    # sorry.
+    EDITOR: "vim"
+
+cull:
+  # kill servers idle for 2 hours, every hour.
+  timeout: 7200
+  every: 3600
+  enabled: true
+
+
+auth:
+  type: google
+  google:
+    clientId: "522043863579-13f09sd50dvncm6q3bg6ri4kk43f5ksg.apps.googleusercontent.com"
+    clientSecret: "***REMOVED***"
+    callbackUrl: "https://rhodes-py.org/hub/oauth_callback"
+  admin:
+    users:
+      - "langm@rhodes.edu"
+      - "langma@gmail.com"
+      - "catie.welsh@gmail.com"
+      - "betswms@gmail.com"
+      - "kirlinp@rhodes.edu"
+      - "larkinsb@rhodes.edu"
+      - "sowellr@rhodes.edu"
+
+hub:
+  extraConfig:
+    myAuthConfig: |
+      c.Authenticator.username_pattern = r'.*@rhodes.edu|langma@gmail.com|elise.rchards@gmail.com|catie.welsh@gmail.com|welshc.test@gmail.com|betswms@gmail.com'
+
+# Ensure images are always available on nodes.
+prePuller:
+  hook:
+    enabled: true
+  continuous:
+    enabed: true
+
+scheduling:
+  podPriority:
+    enabled: true
+  userPlaceholder:
+    # Hold extra spots for new arrivals.
+    replicas: 3
+  # Pin user pods to user pool.
+  userPods:
+    nodeAffinity:
+      matchNodePurpose: require
+  # Minimize resource usage by bin packing (as opposed to
+  # least-loaded).
+  userScheduler:
+    enabled: true
