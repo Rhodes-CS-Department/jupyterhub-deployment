@@ -1,9 +1,20 @@
 # Rhodes Jupyter Environment
 
-The CS program has a GCE
-[project](https://console.cloud.google.com/home/dashboard?project=rhodes-cs).
 
-# Configure your environment
+Quick links:
+
+* [Notebook environment](https://rhodes-py.org)
+* [Admin page](https://rhodes-py.org/hub/admin)
+* [Zero to Jupyterhub](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
+* [CS Program GCP
+  Project](https://console.cloud.google.com/home/dashboard?project=rhodes-cs)
+* [Kubernetes
+  cluster](https://console.cloud.google.com/kubernetes/list?project=rhodes-cs)
+* [Monitoring dashboards](#installing-and-running-the-dashboard) (this document)
+* [Viewing the cluster](#viewing-the-cluster) (this document)
+* [Administering user servers](#administering-user-servers) (this document)
+
+# Configure your local environment for administration
 
 1. Install `gcloud` via its [install page](https://cloud.google.com/sdk/install)
 1. Run `gcloud init` and log in to the Rhodes CS project.
@@ -128,50 +139,12 @@ can use the [GCP
 UI](https://console.cloud.google.com/kubernetes/list?project=rhodes-cs). In the
 `jupyter` cluster, you can view the provisioned nodes, and persistent disks.
 
-You can view services and pods with:
-
-```
-kubectl get service --namespace=jhub
-kubectl get pod --namespace=jhub
-```
-
-Pods will show you all slots for containers. 
-
-If you want to view details about a pod, including recent events, you can run
-`kubectl describe` to view pod details:
-
-```
-kubectl --namespace=jhub describe pod <pod name> 
-```
-
-The `describe` command can also be used with services and other resources.
-
-The recent events listed by describe are useful for finding errors. To dig
-deeper, you cna use `kubectl logs` to view logs (or use the Logs UI in GCP).
-
 ### Expected/example state
 
-TODO add descriptions of system state
+#### Service
 
-Pods:
 ```
-[lang@eschaton ~]$ kubectl --namespace=jhub get pods
-NAME                              READY   STATUS    RESTARTS   AGE
-autohttps-b59c8d84f-8hnzz         2/2     Running   0          3m5s
-continuous-image-puller-4hjxt     1/1     Running   0          4h17m
-hub-6cc79f5bb-wp794               1/1     Running   0          73m
-jupyter-langma-40gmail-2ecom      1/1     Running   0          118s
-proxy-5784b6b988-568ct            1/1     Running   0          4h18m
-user-placeholder-0                1/1     Running   0          4h18m
-user-placeholder-1                1/1     Running   0          4h18m
-user-placeholder-2                1/1     Running   0          4h18m
-user-scheduler-7588c8977d-9n9z4   1/1     Running   0          4h18m
-user-scheduler-7588c8977d-v4knn   1/1     Running   0          4h18m
-```
-
-Service:
-```
-[lang@eschaton ~]$ kubectl --namespace=jhub get service
+[lang@eschaton ~]$ kubectl -n jhub get service
 NAME           TYPE           CLUSTER-IP     EXTERNAL-IP      PORT(S) AGE
 hub            ClusterIP      10.3.245.111   <none>           8081/TCP 4h19m
 proxy-api      ClusterIP      10.3.251.117   <none>           8001/TCP 4h19m
@@ -179,9 +152,14 @@ proxy-http     ClusterIP      10.3.241.81    <none>           8000/TCP 73m
 proxy-public   LoadBalancer   10.3.243.111   35.225.189.212 443:31835/TCP,80:32140/TCP   4h19m
 ```
 
-Deployment:
+[Services](https://kubernetes.io/docs/concepts/services-networking/service/) are
+conceptual APIs with an endpoint. A service can be backed by one or more
+containers/pods, but 
+
+#### Deployment
+
 ```
-[lang@eschaton ~]$ kubectl --namespace=jhub get deployment
+[lang@eschaton ~]$ kubectl -n jhub get deployment
 NAME             READY   UP-TO-DATE   AVAILABLE   AGE
 autohttps        1/1     1            1           73m
 hub              1/1     1            1           4h20m
@@ -189,18 +167,103 @@ proxy            1/1     1            1           4h20m
 user-scheduler   2/2     2            2           4h20m
 ```
 
-Disk:
+A
+[deployment](https://kubernetes.io/docs/concepts/workloads/controllers/deployment/)
+is a set of replicas of pods. In this configuration, we have one replica in each
+deployment, except for two pods for the user to node scheduler, which are
+running leader election.
+
+#### Pods
+
+A [pod](https://kubernetes.io/docs/concepts/workloads/pods/) is an instance of a
+running container (or set of grouped containers). Each pod is assigned a single
+IP address and can be thought of conceptually as a single virtual machine. Pods
+run on "physical" VMs called
+[nodes](https://kubernetes.io/docs/concepts/architecture/nodes/), with multiple
+pods per node. You can see the restrictions on co-residency in `config/config.yaml`.
+
 ```
-[lang@eschaton ~]$ kubectl --namespace=jhub get persistentvolumeclaim
+[lang@eschaton ~/dsrc/jupyter]$ kubectl -n jhub get pod -o wide
+NAME                              READY   STATUS    RESTARTS   AGE     IP          NODE                                     NOMINATED NODE   READINESS GATES
+autohttps-b59c8d84f-8hnzz         2/2     Running   0          43h     10.0.0.25   gke-jupyter-default-pool-23a4322a-qdpl   <none>           <none>
+continuous-image-puller-4hjxt     1/1     Running   0          2d      10.0.1.3    gke-jupyter-user-pool-175a3536-chnf      <none>           <none>
+hub-6cc79f5bb-wp794               1/1     Running   0          45h     10.0.0.22   gke-jupyter-default-pool-23a4322a-qdpl   <none>           <none>
+jupyter-langma-40gmail-2ecom      1/1     Running   0          2m34s   10.0.1.13   gke-jupyter-user-pool-175a3536-chnf      <none>           <none>
+proxy-5784b6b988-568ct            1/1     Running   0          2d      10.0.0.14   gke-jupyter-default-pool-23a4322a-qdpl   <none>           <none>
+user-placeholder-0                1/1     Running   0          2d      10.0.1.4    gke-jupyter-user-pool-175a3536-chnf      <none>           <none>
+user-placeholder-1                1/1     Running   0          2d      10.0.1.2    gke-jupyter-user-pool-175a3536-chnf      <none>           <none>
+user-placeholder-2                1/1     Running   0          2d      10.0.1.5    gke-jupyter-user-pool-175a3536-chnf      <none>           <none>
+user-scheduler-7588c8977d-9n9z4   1/1     Running   0          2d      10.0.0.13   gke-jupyter-default-pool-23a4322a-qdpl   <none>           <none>
+user-scheduler-7588c8977d-v4knn   1/1     Running   0          2d      10.0.0.12   gke-jupyter-default-pool-23a4322a-qdpl   <none>           <none>
+```
+
+Note the `-o wide` flag. This shows what nodes each pod is running on, as well
+as their IP addresses.
+
+You can see from the response that there is one Jupyter server running (for
+`langma@gmail.com`). The `hub` pod is the JupyterHub server. `autohttps` and
+`proxy` are the SSL certificate creator and network proxy. `user-scheduler` has
+two instances (running leader election) and will map users to nodes (VMs). The
+`user-placeholder` pods are dummy containers that ensure that there are free
+slots for new arrivals.
+
+__Pod state and logs:__ 
+
+If you want to view details about a pod, including recent events, you can run
+`kubectl describe` to view pod details:
+
+```
+kubectl -n jhub describe pod <pod name> 
+```
+
+The `describe` command can also be used with services and other resources.
+
+The recent events listed by describe are useful for finding errors. To dig
+deeper, you cna use `kubectl logs` to view logs (or use the Logs UI in GCP).
+
+#### Disk and claims
+
+In our configuration, users have a GCE [Persistent
+Disk](https://cloud.google.com/compute/docs/disks/add-persistent-disk) that is
+their home directory. Persistent disks can be _attached_ to any VM running in GCP
+and then mounted onto the Linux filesystem.
+
+When a user first logs in, a 1G storage claim ([persistent volume
+claim](https://kubernetes.io/docs/concepts/storage/persistent-volumes/)) is
+created, and the Kubernetes master creates a persistent disk to satisfy that
+claim. The size of the claim is configured in `singleusesr/storage/capacity` in
+`config/config.yaml`.
+
+When a pod is created for the user's server, the disk is attached to the node
+running the pod, and the volume is mounted as the user's home directory.
+
+```
+[lang@eschaton ~]$ kubectl -n jhub get persistentvolumeclaim
 NAME                         STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
 claim-langma-40gmail-2ecom   Bound    pvc-8df5bbf0-e119-461d-90d1-51cfd81168e5   1Gi        RWO            standard       6m49s
 hub-db-dir                   Bound    pvc-58ed8e5b-6b4e-45c2-aef1-7c70b89c3a35   1Gi        RWO            standard       4h23m
 
-[lang@eschaton ~]$ kubectl --namespace=jhub get persistentvolume
+[lang@eschaton ~]$ kubectl -n jhub get persistentvolume
 NAME                                       CAPACITY   ACCESS MODES   RECLAIM POLICY   STATUS   CLAIM                             STORAGECLASS   REASON   AGE
 pvc-58ed8e5b-6b4e-45c2-aef1-7c70b89c3a35   1Gi        RWO            Delete           Bound    jhub/hub-db-dir                   standard                4h23m
 pvc-8df5bbf0-e119-461d-90d1-51cfd81168e5   1Gi        RWO            Delete           Bound    jhub/claim-langma-40gmail-2ecom   standard                6m55s
 ```
+
+Here you can see that since only I have logged in, there are only two claims:
+one for the JupyterHub user and one for me. They are backed by two GCE
+persistent disks.
+
+When volume claims are deleted, so are the corresponding disks (reclaim policy).
+
+Note that right now there is not a great way to delete PVCs when a user is
+deleted. There is a
+[discussion](https://discourse.jupyter.org/t/a-cull-idle-user-service-that-deletes-pvs/4742/11)
+about this and issues tracked
+[here](https://github.com/jupyterhub/jupyterhub-idle-culler/issues/8) and
+[here](https://github.com/jupyterhub/kubespawner/issues/446).
+
+Since we are talking about a few hundred GB for a year or so, the cost is not
+that high, and we might just consider redeploying the entire cluster yearly.
 
 ## Viewing logs
 
@@ -210,25 +273,91 @@ viewer](https://console.cloud.google.com/logs/query?project=rhodes-cs).
 To view the logs for a particular pod, you can list pods, and then get its logs:
 
 ```
-kubectl get pods --namespace=jhub
-kubectl logs <pod name> --namespace=jhub
+kubectl get pods -n jhub
+kubectl logs <pod name> -n jhub
 ```
 
-## Restarting deployments
+## Administering user servers
+
+The easiest way to administer user servers is via the
+[admin](https://rhodes-py.org/hub/admin) page. This allows you to log in to user
+servers, kill and restart them, etc.
+
+Once you've logged in to a user server, you can run a terminal through the
+JupyterHub interface.
+
+If, however, you want to ssh into their pod _without_ going through their
+Jupyter server, you can execute commands on the pod using `kubectl exec`.
+
+For example, to run an interactive bash shell, run:
 
 ```
-kubectl --namespace=jhub get deployment
-kubectl --namespace=jhub rollout restart deployment <deployment name>
+kubectl -n jhub exec -it [pod name] /bin/bash
+```
+
+Use `--` to run command with flags:
+
+```
+[lang@eschaton ~]$ kubectl -n jhub exec jupyter-langma-40gmail-2ecom -- ls -lh
+total 20K
+drwxrws--- 2 root   users 16K Dec 23 00:48 lost+found
+-rw-r--r-- 1 jovyan users  72 Dec 24 21:21 Test.ipynb
+```
+
+## Restarting deployments (not user servers)
+
+```
+kubectl -n jhub get deployment
+kubectl -n jhub rollout restart deployment <deployment name>
 ```
 
 ## Manually scaling
 
 ```
 gcloud container clusters resize \
-    <CLUSTER-NAME> \
-    --num-nodes <NEW-SIZE> \
+    jupyter \
+    --node-pool [default-pool|user-pool]
+    --num-nodes [new size] \
     --zone us-central1-a
 ```
+
+## Installing and running the dashboard
+
+Both the [GCP
+page](https://console.cloud.google.com/kubernetes/clusters/details/us-central1-a/jupyter/details?project=rhodes-cs)
+and the Cloud Monitoring
+[dashboard](https://console.cloud.google.com/monitoring/dashboards/resourceList/kubernetes?project=rhodes-cs&pageState=(%22interval%22:()))
+has telemetry data about the cluster.
+
+There is also a dashboard monitor that was installed alongside the cluster with
+the following:
+
+```
+# Install dashboard
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.0.0/aio/deploy/recommended.yaml
+
+# Create admin service account for dashboard, and give it admin permissions
+kubectl create serviceaccount admin-user -n kubernetes-dashboard
+kubectl create clusterrolebinding dash-cluster-admin-binding \
+  --clusterrole=cluster-admin \
+  --serviceaccount=kubernetes-dashboard:admin-user
+```
+
+To view and login to the dashboard, run the following:
+
+```
+kubectl -n kubernetes-dashboard describe secret $(kubectl -n kubernetes-dashboard get secret | grep admin-user | awk '{print $1}')
+```
+
+Copy the `token` from the results. This is the bearer token of the dashboard
+service account.
+
+Then run `kubectl proxy` to create a gateway between your local machine and the
+Kubernetes API server. The dashboard is accessible at
+[http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/]().
+
+Use the token you copied to log in. Select the namespace `jhub` from the
+namespace drop down to view the JupyterHub telemetry.
 
 ## Help docs
 
