@@ -1,5 +1,9 @@
 # Rhodes Jupyter Environment
 
+TODO:
+
+* Add `nbgitpuller` sync and `pip install` of CS1 libraries on container startup.
+* Write HOWTO for `nbgitpuller` assignment distribution through Canvas.
 
 Quick links:
 
