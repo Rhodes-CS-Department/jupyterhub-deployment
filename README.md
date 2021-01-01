@@ -25,8 +25,9 @@ Quick links:
 1. Install `kubectl` by running `gcloud components install kubectl`.
 1. Give your account permissions to perform all admin actions necessary by
    running `./scripts/cluster_permissions.sh your-google-account`
-1. Follow the instruction [here](https://helm.sh/docs/intro/install/), or on
-   MacOS, run `brew install helm` if you are using homebrew.
+1. Install [Helm](https://helm.sh) following the instruction
+   [here](https://helm.sh/docs/intro/install/), or on MacOS, run `brew install
+   helm` if you are using homebrew.
 
 # Initial Cluster Setup
 
@@ -43,12 +44,14 @@ Outside of the guide, there are a few cloud resources that I manually set up.
   cluster's proxy server. This is configured in `config/config.yaml`. You can
   see this
   [here](https://console.cloud.google.com/networking/addresses/list?project=rhodes-cs).
-* I set up the project's OAuth [consent
-  screen](https://console.cloud.google.com/apis/credentials/consent?project=rhodes-cs)
-  and OAuth
-  [credentials](https://console.cloud.google.com/apis/credentials?project=rhodes-cs).
-* The login flow is configured in `config/config.yaml` and uses these
-  credentials.
+* In order to use Google authentication for the environment, this project is
+  configured as an app:
+  * I set up the project's OAuth [consent
+    screen](https://console.cloud.google.com/apis/credentials/consent?project=rhodes-cs)
+    and OAuth
+    [credentials](https://console.cloud.google.com/apis/credentials?project=rhodes-cs).
+  * The login flow is configured in `config/config.yaml` and uses these
+    credentials.
 
 ## Create Kubernetes cluster
 
