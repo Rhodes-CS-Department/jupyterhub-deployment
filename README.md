@@ -25,6 +25,7 @@ Quick links:
 1. Install `kubectl` by running `gcloud components install kubectl`.
 1. Give your account permissions to perform all admin actions necessary by
    running `./scripts/cluster_permissions.sh your-google-account`
+1. Install [Docker](https://hub.docker.com/editions/community/).
 1. Install [Helm](https://helm.sh) following the instruction
    [here](https://helm.sh/docs/intro/install/), or on MacOS, run `brew install
    helm` if you are using homebrew.
