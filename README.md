@@ -21,8 +21,26 @@ Quick links:
 # Configure your local environment for administration
 
 1. Install `gcloud` via its [install page](https://cloud.google.com/sdk/install)
-1. Run `gcloud init` and log in to the Rhodes CS project.
+   and log in to the Rhodes CS project.
+
+   ```
+   gcloud init
+   gcloud config set project rhodes-cs
+   gcloud auth login
+   ```
+
+   You should have received an email when I added you to the Rhodes GCP project.
+   Use that email to log in.
 1. Install `kubectl` by running `gcloud components install kubectl`.
+1. Generate a `kubeconfig` entry for the JupyterHub cluster:
+   
+   ```
+   gcloud container clusters get-credentials jupyter --zone=us-central1-a
+   ```
+
+   This will allow you to control the cluster with the `kubectl` command line
+   tool. You can read the explanation
+   [here](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl).
 1. Give your account permissions to perform all admin actions necessary by
    running `./scripts/cluster_permissions.sh your-google-account`
 1. Install [Docker](https://hub.docker.com/editions/community/).
