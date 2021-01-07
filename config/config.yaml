@@ -31,6 +31,12 @@ singleuser:
     # sorry.
     EDITOR: "vim"
 
+  # Synchronize the libraries repository.
+  lifecycleHooks:
+    postStart:
+      exec:
+        command: ["pip", "install", "git+git://github.com/Rhodes-CS-Department/comp141-libraries.git"]
+
 cull:
   # kill servers idle for 2 hours, every hour.
   timeout: 7200
