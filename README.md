@@ -18,6 +18,86 @@ Quick links:
 * [Viewing the cluster](#viewing-the-cluster) (this document)
 * [Administering user servers](#administering-user-servers) (this document)
 
+# Cluster Architecture and Configuration
+
+First, a brief overview of how JupyterHub works:
+* There is a JupyterHub process running to manage single-user Jupyter servers.
+  Users connect to this process and authenticate. After authenticating, a
+  Jupyter server is spawned for that user.
+* When users are running notebooks or managing their files, etc., they are
+  communicating directly with their server.
+* The main JupyterHub process can cull inactive servers, be used for server
+  administration for admin users, etc.
+
+In the Rhodes CS GCP project, there is a [Kubernetes](https://kubernetes.io/)
+cluster running the JupyterHub deployment for the program. Kubernetes is a tool
+for running and managing containers (in our case,
+[Docker](https://docker-curriculum.com/) containers) on a cluster of physical
+machines.
+
+If you are not familiar with containers, think of them as lightweight virtual
+machines. A _container image_ is the "disk image" for that VM, containing the
+binaries that the virtual machine will run, the filesystem, etc.
+
+In this cluster, there is a set of nodes/"physical" machines (GCE VMs) that is
+running the main JupyterHub server. When a user logs in, a __user server__ is
+spawned by JupyterHub. This is a container running the Jupyter server.
+
+If there is not enough physical resources to run the user server, another node
+is added to the cluster. When user servers time out and are reaped, creating
+idle resources, these nodes are given back to GCE.
+
+Users' home directories are stored on GCE persistent disks that are attached to
+their containers when the containers are started. There is more detail about
+this later in the document.
+
+The JupyterHub deployment is configured in two ways:
+
+* __The Helm chart__ that configures the JupyterHub application.
+  [Helm](https://helm.sh) is package manager for Kubernetes. A Helm chart is a
+  configuration of Kubernetes processes/resources. We use the chart template
+  provided by the JupyterHub project (the repository is
+  [here](https://jupyterhub.github.io/helm-chart/)), which configures the
+  JupyterHub server, the network proxy, etc.
+
+  We supply __values__ to fill in this template and customize our deployment of
+  JupyterHub (`config/config.yaml`).  This configuration includes which docker
+  container to run, how many resources should be provided to a server, how
+  authentication works, etc.
+
+* __The Docker container image__ that runs both user servers. The Jupyter
+  project maintains a [set of container
+  images](https://github.com/jupyter/docker-stacks/). However, we want to
+  install some non-default libraries, so we have a custom container image for
+  our deployment. This is configured in `config/Dockerfile` and is hosted in the
+  GCP project
+  [here](https://console.cloud.google.com/gcr/images/rhodes-cs?project=rhodes-cs).
+
+  In this guide, there are instructions for configuring, building, and pushing
+  this container image.
+
+## Distributing Files to Students
+
+The deployment is configured to automatically update Rhodes-specific libraries
+when a user logs in, by running `pip install` on [this
+repository](https://github.com/Rhodes-CS-Department/comp141-libraries).
+
+Distributing files to students is done by using
+[nbgitpuller](https://github.com/jupyterhub/nbgitpuller), a tool that
+automatically syncs files in a user's directory with a GitHub repository. The
+tool is smart enough to do conflict resolution and hides the machinery of
+cloning/updating a repo from the student.
+
+To distribute a repository to a student, first make the repository public and
+generate a URL for nbgitpuller using [this
+generator](https://jupyterhub.github.io/nbgitpuller/link?hub=https://rhodes-py.org&branch=main).
+Some configuration has been pre-populated. The generated url can then be
+distributed to students (e.g., through Canvas).
+
+It is also possible to configure JupyterHub to automatically run nbgitpuller
+when a user's server starts. Instructions are
+[here](https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-environment.html#using-nbgitpuller-to-synchronize-a-folder).
+
 # Configure your local environment for administration
 
 1. Install `gcloud` via its [install page](https://cloud.google.com/sdk/install)
@@ -47,37 +127,6 @@ Quick links:
 1. Install [Helm](https://helm.sh) following the instruction
    [here](https://helm.sh/docs/intro/install/), or on MacOS, run `brew install
    helm` if you are using homebrew.
-
-# Initial Cluster Setup
-
-These initial setup steps follow the [Zero to JupyterHub with Kubernetes
-guide](https://zero-to-jupyterhub.readthedocs.io/en/latest/).
-
-## GCE project configuration
-
-Outside of the guide, there are a few cloud resources that I manually set up.
-
-* Appropriate APIs are already enabled for the project (GKE, logging,
-  containers, etc.).
-* There's a static external IP address provisioned that is in use by the
-  cluster's proxy server. This is configured in `config/config.yaml`. You can
-  see this
-  [here](https://console.cloud.google.com/networking/addresses/list?project=rhodes-cs).
-* In order to use Google authentication for the environment, this project is
-  configured as an app:
-  * I set up the project's OAuth [consent
-    screen](https://console.cloud.google.com/apis/credentials/consent?project=rhodes-cs)
-    and OAuth
-    [credentials](https://console.cloud.google.com/apis/credentials?project=rhodes-cs).
-  * The login flow is configured in `config/config.yaml` and uses these
-    credentials.
-
-## Create Kubernetes cluster
-
-1. Create the Kubernetes cluster by running `./scripts/create_cluster.sh`.
-1. You can verify that the cluster exists by running `kubectl get node`
-1. Create a pool of user nodes by running `./scripts/create_node_pool.sh` (you
-   might have to update your Cloud SDK to install beta components).
 
 # JupyterHub and Docker configs
 
@@ -386,3 +435,36 @@ namespace drop down to view the JupyterHub telemetry.
 The
 [Zero-to-JupyterHub](https://zero-to-jupyterhub.readthedocs.io/en/latest/administrator/debug.html)
 docs have information about debugging, and other FAQ topics.
+
+# Initial Cluster Setup
+
+These initial setup steps follow the [Zero to JupyterHub with Kubernetes
+guide](https://zero-to-jupyterhub.readthedocs.io/en/latest/).
+
+## GCE project configuration
+
+Outside of the guide, there are a few cloud resources that I manually set up.
+
+* Appropriate APIs are already enabled for the project (GKE, logging,
+  containers, etc.).
+* There's a static external IP address provisioned that is in use by the
+  cluster's proxy server. This is configured in `config/config.yaml`. You can
+  see this
+  [here](https://console.cloud.google.com/networking/addresses/list?project=rhodes-cs).
+* In order to use Google authentication for the environment, this project is
+  configured as an app:
+  * I set up the project's OAuth [consent
+    screen](https://console.cloud.google.com/apis/credentials/consent?project=rhodes-cs)
+    and OAuth
+    [credentials](https://console.cloud.google.com/apis/credentials?project=rhodes-cs).
+  * The login flow is configured in `config/config.yaml` and uses these
+    credentials.
+
+## Create Kubernetes cluster
+
+1. Create the Kubernetes cluster by running `./scripts/create_cluster.sh`.
+1. You can verify that the cluster exists by running `kubectl get node`
+1. Create a pool of user nodes by running `./scripts/create_node_pool.sh` (you
+   might have to update your Cloud SDK to install beta components).
+
+
