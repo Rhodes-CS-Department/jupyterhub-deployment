@@ -76,6 +76,28 @@ The JupyterHub deployment is configured in two ways:
   In this guide, there are instructions for configuring, building, and pushing
   this container image.
 
+## Distributing Files to Students
+
+The deployment is configured to automatically update Rhodes-specific libraries
+when a user logs in, by running `pip install` on [this
+repository](https://github.com/Rhodes-CS-Department/comp141-libraries).
+
+Distributing files to students is done by using
+[nbgitpuller](https://github.com/jupyterhub/nbgitpuller), a tool that
+automatically syncs files in a user's directory with a GitHub repository. The
+tool is smart enough to do conflict resolution and hides the machinery of
+cloning/updating a repo from the student.
+
+To distribute a repository to a student, first make the repository public and
+generate a URL for nbgitpuller using [this
+generator](https://jupyterhub.github.io/nbgitpuller/link?hub=https://rhodes-py.org&branch=main).
+Some configuration has been pre-populated. The generated url can then be
+distributed to students (e.g., through Canvas).
+
+It is also possible to configure JupyterHub to automatically run nbgitpuller
+when a user's server starts. Instructions are
+[here](https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-environment.html#using-nbgitpuller-to-synchronize-a-folder).
+
 # Configure your local environment for administration
 
 1. Install `gcloud` via its [install page](https://cloud.google.com/sdk/install)
