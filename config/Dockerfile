@@ -4,5 +4,6 @@ FROM jupyter/scipy-notebook:latest
 
 # Begin custom install scripts:
 RUN pip install --no-cache-dir ipycanvas
+RUN pip install --no-cache-dir ipyevents
 RUN pip install --no-cache-dir nbgitpuller
 RUN pip install --no-cache-dir okpy

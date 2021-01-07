@@ -109,12 +109,8 @@ __configuration changes__ for the cluster should modify this file.
    This is the step that actually installs JupyterHub, so it might take a little
    bit.
 
-1. Once this is complete, you can run the following to get the public IP
-   address of the http proxy for JupyterHub:
-
-   ```
-   kubectl get service --namespace jhub
-   ```
+   __Warning:__ This will create a brief outage where the service is
+   unavailable, so don't make config changes frequently.
 
 
 ## Customizing the Docker image
