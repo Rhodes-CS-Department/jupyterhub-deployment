@@ -36,6 +36,13 @@ singleuser:
     postStart:
       exec:
         command: ["pip", "install", "git+git://github.com/Rhodes-CS-Department/comp141-libraries.git"]
+        command: ["gitpuller", "https://github.com/Rhodes-CS-Department/comp141-sp21", "main", "comp141-materials"]
+        command:
+          - "sh"
+          - "-c"
+          - |
+            pip install git+git://github.com/Rhodes-CS-Department/comp141-libraries.git
+            gitpuller https://github.com/Rhodes-CS-Department/comp141-sp21 main comp141-materials
 
 cull:
   # kill servers idle for 2 hours, every hour.
