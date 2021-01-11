@@ -73,6 +73,10 @@ The JupyterHub deployment is configured in two ways:
 
 ## Distributing Files to Students
 
+__For Spring '21:__ All users automatically sync [this GitHub
+repo](https://github.com/Rhodes-CS-Department/comp141-sp21) on server start
+(using nbgitpuller).
+
 The deployment is configured to automatically update Rhodes-specific libraries
 when a user logs in, by running `pip install` on [this
 repository](https://github.com/Rhodes-CS-Department/comp141-libraries).
