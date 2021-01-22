@@ -7,13 +7,14 @@ __Known issues/warnings:__
   repos (at least then the server is accessible).
   * Tracked in issue
   [#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
-  * Mitigation is to fix the user directory/repo (see [this
-    section](#accessing-user-files-without-a-server)).
+  * Mitigation is to fix the user directory/repo 
+    (see [this section](#accessing-user-files-without-a-server)).
 
 Quick links:
 
 * [Notebook environment](https://rhodes-py.org)
 * [Admin page](https://rhodes-py.org/hub/admin)
+* [Working with GitHub/nbgitpuller](#working-with-github-and-nbgitpuller)
 * [Zero to Jupyterhub](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
 * [CS Program GCP
   Project](https://console.cloud.google.com/home/dashboard?project=rhodes-cs)
@@ -106,6 +107,47 @@ distributed to students (e.g., through Canvas).
 It is also possible to configure JupyterHub to automatically run nbgitpuller
 when a user's server starts. Instructions are
 [here](https://zero-to-jupyterhub.readthedocs.io/en/latest/jupyterhub/customizing/user-environment.html#using-nbgitpuller-to-synchronize-a-folder).
+
+### Working with GitHub and nbgitpuller
+
+As of Spring'21, the container image for servers does not contain ssh, so if you
+use 2fa with GitHub, you will need to [create an access
+token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
+in order to use https authentication.
+
+Once you've done that, I think it'll helpful to cache this token for a while:
+
+```
+$ git config --global credential.helper cache
+$ git config --global credential.helper 'cache --timeout=1209600' # 2 weeks
+```
+
+Then, make sure you clone the repo to a separate directory than the
+`nbgitpuller` synced one (currently `comp141-materials`):
+
+```
+$ git clone https://github.com/Rhodes-CS-Department/comp141-sp21.git comp141-sp21
+```
+
+When making local changes to be reviewed/to shared resources, use a branch:
+
+```
+$ git checkout -b <my local branch>
+...
+$ git commit -m 'my changes'
+$ git push --set-upstream origin <my local branch>
+# after changes have been merged
+$ git checkout main
+$ git pull
+```
+
+If you had changes in `main` but wanted to actually be working in a branch:
+
+```
+$ git stash # stash changes
+$ git checkout -b <branch>
+$ git stash pop # unstash changes in new branch
+```
 
 # Configure your local environment for administration
 
