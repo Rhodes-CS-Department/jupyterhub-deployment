@@ -64,13 +64,14 @@ auth:
       - "catie.welsh@gmail.com"
       - "betswms@gmail.com"
       - "kirlinp@rhodes.edu"
+      - "pkirlin@gmail.com"
       - "larkinsb@rhodes.edu"
       - "sowellr@rhodes.edu"
 
 hub:
   extraConfig:
     myAuthConfig: |
-      c.Authenticator.username_pattern = r'.*@rhodes.edu|langma@gmail.com|elise.rchards@gmail.com|catie.welsh@gmail.com|welshc.test@gmail.com|betswms@gmail.com'
+      c.Authenticator.username_pattern = r'.*@rhodes.edu|langma@gmail.com|elise.rchards@gmail.com|catie.welsh@gmail.com|welshc.test@gmail.com|betswms@gmail.com|pkirlin@gmail.com'
 
 # Ensure images are always available on nodes.
 prePuller:
