@@ -1,5 +1,12 @@
 # Rhodes Jupyter Environment
 
+__Known issues/warnings:__
+* If a user deletes a file, then the file is deleted from the `nbgitpuller`
+  origin repo, this can make a user's server inaccessible until the conflict is
+  fixed. Can be mitigated by switching from a single repo to per-assignment
+  repos (at least then the server is accessible). Tracked in issue
+  [#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
+
 Quick links:
 
 * [Notebook environment](https://rhodes-py.org)
