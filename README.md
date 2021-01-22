@@ -374,6 +374,44 @@ drwxrws--- 2 root   users 16K Dec 23 00:48 lost+found
 -rw-r--r-- 1 jovyan users  72 Dec 24 21:21 Test.ipynb
 ```
 
+## Accessing user files without a server
+
+It is possible for a user to make changes to their home directory in a way that
+prevents their server from starting. If, for example, they prevent nbgitpuller
+from running successfully, this may cause the startup script for the server to
+fail. This is tracked in #5.
+
+In that case, you might want to access a user's file system. In order to do
+this, you will need to create a temporary virtual machine, attach the user's
+home directory to it, and modify their file system.
+
+First, find the disk that corresponds to the user:
+
+```
+[lang@eschaton ~/courses/141]$ kubectl -n jhub get pvc | grep langma
+NAME                            STATUS   VOLUME                                     CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+claim-langma-40gmail-2ecom      Bound    pvc-8df5bbf0-e119-461d-90d1-51cfd81168e5   1Gi        RWO            standard       30d
+```
+
+The `pvc-<GUID>` is the name of the user's disk. To access it, create a VM
+instance and then follow the procedure for adding a disk to the VM (outlined
+[here](https://cloud.google.com/compute/docs/disks/add-persistent-disk#console).
+Note that in those instructions, you will be attaching a new disk, but in our
+case, you will want to choose an existing disk, and use the disk name you found
+above.
+
+After this step, you can [ssh
+into](https://cloud.google.com/compute/docs/instances/connecting-to-instance#connecting_to_vms)
+the new VM and mount/edit the disk.
+
+```
+$ sudo su
+$ mkdir debug
+$ mount /dev/sdb debug
+$ cd debug
+$ ...
+```
+
 ## Restarting deployments (not user servers)
 
 ```
