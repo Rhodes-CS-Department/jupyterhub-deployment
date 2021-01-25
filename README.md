@@ -24,6 +24,34 @@ Quick links:
 * [Viewing the cluster](#viewing-the-cluster) (this document)
 * [Administering user servers](#administering-user-servers) (this document)
 
+# Table of Contents
+(Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go))
+
+* [Cluster Architecture and Configuration](#cluster-architecture-and-configuration)
+  * [Distributing Files to Students](#distributing-files-to-students)
+    * [Working with GitHub and nbgitpuller](#working-with-github-and-nbgitpuller)
+* [Configure your local environment for administration](#configure-your-local-environment-for-administration)
+* [JupyterHub and Docker configs](#jupyterhub-and-docker-configs)
+  * [Configuring JupyterHub](#configuring-jupyterhub)
+  * [Customizing the Docker image](#customizing-the-docker-image)
+* [Troubleshooting and Administration](#troubleshooting-and-administration)
+  * [Viewing the cluster](#viewing-the-cluster)
+    * [Expected/example state](#expectedexample-state)
+      * [Service](#service)
+      * [Deployment](#deployment)
+      * [Pods](#pods)
+      * [Disk and claims](#disk-and-claims)
+  * [Viewing logs](#viewing-logs)
+  * [Administering user servers](#administering-user-servers)
+  * [Accessing user files without a server](#accessing-user-files-without-a-server)
+  * [Restarting deployments (not user servers)](#restarting-deployments-not-user-servers)
+  * [Manually scaling](#manually-scaling)
+  * [Installing and running the dashboard](#installing-and-running-the-dashboard)
+  * [Help docs](#help-docs)
+* [Initial Cluster Setup](#initial-cluster-setup)
+  * [GCE project configuration](#gce-project-configuration)
+  * [Create Kubernetes cluster](#create-kubernetes-cluster)
+
 # Cluster Architecture and Configuration
 
 First, a brief overview of how JupyterHub works:
