@@ -6,6 +6,7 @@ proxy:
   https:
     enabled: true
     hosts:
+      - rhodes-notebook.org
       - rhodes-py.org
     letsencrypt:
       contactEmail: langma@gmail.com
@@ -56,7 +57,7 @@ auth:
   google:
     clientId: "522043863579-13f09sd50dvncm6q3bg6ri4kk43f5ksg.apps.googleusercontent.com"
     clientSecret: "***REMOVED***"
-    callbackUrl: "https://rhodes-py.org/hub/oauth_callback"
+    callbackUrl: "https://rhodes-notebook.org/hub/oauth_callback"
   admin:
     users:
       - "langm@rhodes.edu"
