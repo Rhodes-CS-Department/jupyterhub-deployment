@@ -501,13 +501,34 @@ kubectl -n jhub rollout restart deployment <deployment name>
 
 ## Manually scaling
 
+If user servers cannot schedule themselves, users will see an error message
+indicating that there are not enough nodes to schedule their pod. When this
+happens, the user pool needs to be scaled up. Autoscaling should take care of
+this normally, but if manual intervention is required, you can manually scale
+the pool up.
+
+__Using `gcloud`:__
+
 ```
 gcloud container clusters resize \
     jupyter \
-    --node-pool [default-pool|user-pool]
+    --node-pool user-pool \
     --num-nodes [new size] \
     --zone us-central1-a
 ```
+
+It will take a few moments for the pool to scale up.
+
+__Using the UI:__
+
+* Go to the [User Pool
+  config](https://console.cloud.google.com/kubernetes/nodepool/us-central1-a/jupyter/user-pool?project=rhodes-cs)
+  in the Cloud Console.
+* Click "EDIT" and manually change the "Number of nodes" field to a higher
+  number.
+* Click "Save." It will take a few moments for the node pool to scale up.
+
+
 
 ## Installing and running the dashboard
 

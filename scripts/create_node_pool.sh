@@ -5,7 +5,7 @@ gcloud beta container node-pools create user-pool \
   --num-nodes 0 \
   --enable-autoscaling \
   --min-nodes 0 \
-  --max-nodes 3 \
+  --max-nodes 20 \
   --node-labels hub.jupyter.org/node-purpose=user \
   --node-taints hub.jupyter.org_dedicated=user:NoSchedule \
   --zone us-central1-a \
