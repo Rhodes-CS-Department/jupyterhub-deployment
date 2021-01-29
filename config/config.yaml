@@ -84,6 +84,9 @@ prePuller:
 scheduling:
   podPriority:
     enabled: true
+    globalDefault: false
+    defaultPriority: 0
+    userPlaceholderPriority: -10
   userPlaceholder:
     # Hold extra spots for new arrivals.
     replicas: 3
