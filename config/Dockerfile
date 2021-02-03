@@ -8,6 +8,7 @@ FROM jupyter/scipy-notebook:latest
 USER root
 RUN apt-get update && apt-get -y install apt-utils
 RUN apt-get -y install vim-tiny curl less
+RUN ln -s /usr/bin/vim.tiny /usr/local/bin/vim
 
 # De-escalate
 USER $NB_UID
