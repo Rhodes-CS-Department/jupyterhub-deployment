@@ -36,8 +36,6 @@ singleuser:
   lifecycleHooks:
     postStart:
       exec:
-        command: ["pip", "install", "git+git://github.com/Rhodes-CS-Department/comp141-libraries.git"]
-        command: ["gitpuller", "https://github.com/Rhodes-CS-Department/comp141-sp21", "main", "comp141-materials"]
         command:
           - "sh"
           - "-c"
@@ -46,8 +44,8 @@ singleuser:
             gitpuller https://github.com/Rhodes-CS-Department/comp141-sp21 main comp141-materials
 
 cull:
-  # kill servers idle for 2 hours, every hour.
-  timeout: 7200
+  # kill servers idle for 1 hours, every hour.
+  timeout: 3600
   every: 3600
   enabled: true
 
