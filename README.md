@@ -14,15 +14,16 @@ Quick links:
 
 * [Notebook environment](https://rhodes-py.org)
 * [Admin page](https://rhodes-py.org/hub/admin)
-* [Working with GitHub/nbgitpuller](#working-with-github-and-nbgitpuller)
-* [Zero to Jupyterhub](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
-* [CS Program GCP
-  Project](https://console.cloud.google.com/home/dashboard?project=rhodes-cs)
 * [Kubernetes
   cluster](https://console.cloud.google.com/kubernetes/list?project=rhodes-cs)
+* [CS Program GCP
+  Project](https://console.cloud.google.com/home/dashboard?project=rhodes-cs)
+* [Working with GitHub/nbgitpuller](#working-with-github-and-nbgitpuller) (this
+  document)
 * [Monitoring dashboards](#installing-and-running-the-dashboard) (this document)
 * [Viewing the cluster](#viewing-the-cluster) (this document)
 * [Administering user servers](#administering-user-servers) (this document)
+* [Zero to Jupyterhub](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
 
 # Table of Contents
 (Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go))
