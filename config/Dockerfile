@@ -36,6 +36,5 @@ RUN jupyter nbextension enable move_selected_cells/main
 RUN jupyter nbextension enable code_font_size/code_font_size
 RUN jupyter nbextension enable spellchecker/main
 
-
 # Optional libraries
 RUN pip install --no-cache-dir beautifulsoup4
