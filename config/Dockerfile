@@ -38,3 +38,5 @@ RUN jupyter nbextension enable spellchecker/main
 
 # Optional libraries
 RUN pip install --no-cache-dir beautifulsoup4
+# Install RISE for slideshows
+RUN pip install --no-cache-dir RISE
