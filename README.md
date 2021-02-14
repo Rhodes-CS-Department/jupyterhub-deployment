@@ -14,15 +14,16 @@ Quick links:
 
 * [Notebook environment](https://rhodes-py.org)
 * [Admin page](https://rhodes-py.org/hub/admin)
-* [Working with GitHub/nbgitpuller](#working-with-github-and-nbgitpuller)
-* [Zero to Jupyterhub](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
-* [CS Program GCP
-  Project](https://console.cloud.google.com/home/dashboard?project=rhodes-cs)
 * [Kubernetes
   cluster](https://console.cloud.google.com/kubernetes/list?project=rhodes-cs)
+* [CS Program GCP
+  Project](https://console.cloud.google.com/home/dashboard?project=rhodes-cs)
+* [Working with GitHub/nbgitpuller](#working-with-github-and-nbgitpuller) (this
+  document)
 * [Monitoring dashboards](#installing-and-running-the-dashboard) (this document)
 * [Viewing the cluster](#viewing-the-cluster) (this document)
 * [Administering user servers](#administering-user-servers) (this document)
+* [Zero to Jupyterhub](https://zero-to-jupyterhub.readthedocs.io/en/latest/)
 
 # Table of Contents
 (Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go))
@@ -34,6 +35,8 @@ Quick links:
 * [JupyterHub and Docker configs](#jupyterhub-and-docker-configs)
   * [Configuring JupyterHub](#configuring-jupyterhub)
   * [Customizing the Docker image](#customizing-the-docker-image)
+      * [Testing locally](#testing-locally)
+      * [Pushing the image to GCP](#pushing-the-image-to-gcp)
 * [Troubleshooting and Administration](#troubleshooting-and-administration)
   * [Viewing the cluster](#viewing-the-cluster)
     * [Expected/example state](#expectedexample-state)
@@ -256,11 +259,21 @@ In `config/Dockerfile`, make the desired changes.
 
 Then, when you want to build the image, run:
 
-`docker build -t jserver -f Dockerfile config/`
+`docker build -t jserver -f config/Dockerfile config/`
 
-You can confirm that the image was updated with `docker image ls` and can run
-the server as a container with `docker run -p 443:443 jserver` (the `-p`
-option forwards port 443.
+#### Testing locally
+
+You can confirm that the image was updated with `docker image ls`.
+
+To test the container image locally, you can run the Docker image with the
+following (the `-p` flag forwards the container's port 8888 to the local port
+8888):
+
+```
+docker run -p 8888:8888 --name jh jserver
+```
+
+#### Pushing the image to GCP
 
 Next we need to publish the image to the Rhodes container registry, so that
 Kubernetes will start pulling the new image.
