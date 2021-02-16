@@ -24,17 +24,17 @@ RUN pip install --no-cache-dir yapf
 
 # Jupyter extensions
 RUN pip install --no-cache-dir jupyter_contrib_nbextensions
-RUN jupyter contrib nbextension install --user
+RUN jupyter contrib nbextension install --sys-prefix
 # Extensions enabled by default
-RUN jupyter nbextension enable code_prettify/code_prettify
-RUN jupyter nbextension enable toggle_all_line_numbers/main
-RUN jupyter nbextension enable execution_dependencies/execution_dependencies
-RUN jupyter nbextension enable freeze/main
-RUN jupyter nbextension enable varInspector/main
-RUN jupyter nbextension enable limit_output/main
-RUN jupyter nbextension enable move_selected_cells/main
-RUN jupyter nbextension enable code_font_size/code_font_size
-RUN jupyter nbextension enable spellchecker/main
+RUN jupyter nbextension enable code_prettify/code_prettify --sys-prefix
+RUN jupyter nbextension enable toggle_all_line_numbers/main --sys-prefix
+RUN jupyter nbextension enable execution_dependencies/execution_dependencies --sys-prefix
+RUN jupyter nbextension enable freeze/main --sys-prefix
+RUN jupyter nbextension enable varInspector/main --sys-prefix
+RUN jupyter nbextension enable limit_output/main --sys-prefix
+RUN jupyter nbextension enable move_selected_cells/main --sys-prefix
+RUN jupyter nbextension enable code_font_size/code_font_size --sys-prefix
+RUN jupyter nbextension enable spellchecker/main --sys-prefix
 
 # Optional libraries
 RUN pip install --no-cache-dir beautifulsoup4
