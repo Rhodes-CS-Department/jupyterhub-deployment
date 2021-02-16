@@ -15,8 +15,9 @@ singleuser:
   image:
     # Configured for Rhodes with required libraries installed.
     name: gcr.io/rhodes-cs/jserver
-    # May want to settle on a stable version and allow development branches.
-    tag: latest
+    # When upgrading the docker image, update the tag.
+    # Tags should be in the namespace YYYY_MM_DDrcVV
+    tag: 2020_02_16rc01
   # user resource limits
   memory:
     limit: 1G
