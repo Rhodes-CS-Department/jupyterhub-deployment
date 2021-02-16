@@ -284,14 +284,29 @@ If you haven't configured Docker for GCP container registry, run the following:
 gcloud auth configure-docker
 ```
 
+Now, choose a release candidate version for the new image. The version should be
+of the form `YYYY_MM_DDrcVV` where `VV` is used for multiple versions per day
+(start with 00).
 
 ```
-docker tag jserver:latest gcr.io/rhodes-cs/jserver
+export RC_VERSION=YYYY_MM_DDrcVV
+docker tag jserver:latest gcr.io/rhodes-cs/jserver:$RC_VERSION
 docker image ls
-docker push gcr.io/rhodes-cs/jserver
+docker push gcr.io/rhodes-cs/jserver:$RC_VERSION
 ```
 
 Now you should see the container when you run `gcloud container images list`.
+Additionally, you should see the the new release candidate tag when you run
+`gcloud container images list-tags gcr.io/rhodes-cs/jserver`:
+
+```
+gcloud container images list-tags gcr.io/rhodes-cs/jserver
+DIGEST        TAGS                   TIMESTAMP
+48d50b385e28  2020_02_16rc01,latest  2021-02-16T15:54:46
+fde1b612abad                         2021-02-14T18:06:17
+e05babc291c6                         2021-01-24T21:32:16
+6d4d44ff86d5                         2020-12-19T18:13:00
+```
 
 # Troubleshooting and Administration
 
