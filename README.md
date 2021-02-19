@@ -270,7 +270,21 @@ following (the `-p` flag forwards the container's port 8888 to the local port
 8888):
 
 ```
-docker run -p 8888:8888 --name jh jserver
+docker run -p 8888:8888 jserver
+```
+
+If you want to do development of course materials or libraries that are stored
+locally, you can mount your local filesystem to the user home directory on the
+locally-running container image with the following.
+
+`docker run -p 8888:8888 -v /path/to/dir/to/mount:/home/jovyan/work jserver`
+
+If you are developing libraries and experimenting with them in a notebook, it is
+helpful to auto-reload them on changes:
+
+```
+%load_ext autoreload
+%autoreload 2
 ```
 
 #### Pushing the image to GCP
