@@ -18,6 +18,7 @@ RUN pip install --no-cache-dir ipycanvas
 RUN pip install --no-cache-dir ipyevents
 RUN pip install --no-cache-dir nbgitpuller
 RUN pip install --no-cache-dir okpy
+RUN pip install --no-cache-dir jupyter-ui-poll # 141 libs dependency
 
 # Dependencies for extensions
 RUN pip install --no-cache-dir yapf
