@@ -13,6 +13,7 @@ proxy:
 
 singleuser:
   image:
+    # Docker container used for spawning user servers.
     # Configured for Rhodes with required libraries installed.
     name: gcr.io/rhodes-cs/jserver
     # When upgrading the docker image, update the tag.
@@ -58,6 +59,7 @@ auth:
     clientSecret: "***REMOVED***"
     callbackUrl: "https://rhodes-notebook.org/hub/oauth_callback"
   admin:
+    # TODO add Anese and Waldo
     users:
       - "langm@rhodes.edu"
       - "langma@gmail.com"

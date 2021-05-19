@@ -331,6 +331,23 @@ can use the [GCP
 UI](https://console.cloud.google.com/kubernetes/list?project=rhodes-cs). In the
 `jupyter` cluster, you can view the provisioned nodes, and persistent disks.
 
+### `kubectl` verbs
+
+`kubectl` has a few verbs that one should know in order to view and debug a
+cluster:
+
+* `kubectl get [api-resource]` -- list objects of type `api-resource` (use
+  `kubectl api-resources` to list them all). The main ones for our purposes are
+  `service`, `deployment`, `pod`, and `node`.
+* `kubectl describe [api-resource] [resource-name]` -- view details for the
+  particular resource (or all resources of the given type, if no resource name
+  is given), including events.
+* `kubectl logs [pod-name]` -- view logs (STDOUT) for a particular pod.
+* `kubectl exec [pod-name] -- [command]` -- run a command within the given pod.
+  Add the `-ti` flags to `exec` to run an interactive command (e.g., `bash`).
+* `kubectl proxy` -- open a proxy to the cluster to access the cluster API and
+  the API of all resources (through http verbs).
+
 ### Expected/example state
 
 #### Service
@@ -345,8 +362,25 @@ proxy-public   LoadBalancer   10.3.243.111   35.225.189.212 443:31835/TCP,80:321
 ```
 
 [Services](https://kubernetes.io/docs/concepts/services-networking/service/) are
-conceptual APIs with an endpoint. A service can be backed by one or more
-containers/pods, but 
+conceptual APIs with an endpoint, and are how different applications within the
+same k8s cluster can find and communicate with one another. A service can be
+backed by one or more containers/pods. In our deployment, the only services are
+those for the hub itself (pointing to the `hub` deployment) and the JupyterHub
+API and HTTP proxies that proxy traffic for a particular user to a particular
+server (both pointing to the `proxy` deployment).
+
+Anything that will be exposed to the outside world requires a service. Here,
+only the public proxy is exposed publically. This proxy will route HTTPS to
+internal services (i.e., hub traffic to the hub and user traffic to user
+servers).
+
+The `proxy-public` service points to `autohttps`, which is running
+[Traefik](https://traefik.io/traefik/) to route requests to internal services.
+
+Note that services _no not_ correspond 1:1 with pods or even deployments.
+Services use [labels and
+selectors](https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/)
+to match pods.
 
 #### Deployment
 
