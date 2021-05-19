@@ -2,6 +2,12 @@
 
 ### OneLogin config
 
+* Looks like directions changed between [current
+  stable](https://zero-to-jupyterhub.readthedocs.io/en/stable/administrator/authentication.html#genericoauthenticator-openid-connect)
+  and
+  [0.9.0](https://zero-to-jupyterhub.readthedocs.io/en/0.9.0/administrator/authentication.html#openid-connect).
+  We will get things working with 0.9.0 and then fix our config when we update
+  to stable.
 * Use `hub.extraConfig` for the config described in [this
   issue](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/15).
   Follow instructions from
@@ -25,4 +31,5 @@
   PR](https://github.com/Rhodes-CS-Department/comp141-libraries/pull/5).
 * Set up fall 2021 and spring 2022 GitHub repos.
 * Add fall 2021 repo to the hub config.
+
 
