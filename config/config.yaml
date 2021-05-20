@@ -52,15 +52,34 @@ cull:
   enabled: true
 
 
+hub:
+  extraEnv:
+    OAUTH2_AUTHORIZE_URL: https://rhodes.onelogin.com/oidc/2/auth
+    OAUTH2_TOKEN_URL: https://rhodes.onelogin.com/oidc/2/token
+    OAUTH_CALLBACK_URL: https://rhodes-notebook.org/hub/oauth_callback
+
 auth:
-  type: google
-  google:
-    clientId: "522043863579-13f09sd50dvncm6q3bg6ri4kk43f5ksg.apps.googleusercontent.com"
-    clientSecret: "uZCVDxbqBd048lEe4bdwaabe"
-    callbackUrl: "https://rhodes-notebook.org/hub/oauth_callback"
+  type: custom
+  custom:
+    className: oauthenticator.generic.GenericOAuthenticator
+		config:
+      login_service: "OneLogin"
+      client_id: "client-id"
+      client_secret: "client-secret"
+      oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
+      authorize_url: https://rhodes.onelogin.com/oidc/2/auth
+      token_url: https://rhodes.onelogin.com/oidc/2/token
+      userdata_url: https://rhodes.onelogin.com/oidc/2/me
+      userdata_method: GET
+      userdata_params: {'state': 'state'}
+      username_key: email
+      scope:
+        - openid
+        - profile
   admin:
-    # TODO add Anese and Waldo
     users:
+      - "parch-22@rhodes.edu"
+      - "abuwa-23@rhodes.edu"
       - "langm@rhodes.edu"
       - "langma@gmail.com"
       - "catie.welsh@gmail.com"
@@ -70,10 +89,6 @@ auth:
       - "larkinsb@rhodes.edu"
       - "sowellr@rhodes.edu"
 
-hub:
-  extraConfig:
-    myAuthConfig: |
-      c.Authenticator.username_pattern = r'.*@rhodes.edu|langma@gmail.com|elise.rchards@gmail.com|catie.welsh@gmail.com|welshc.test@gmail.com|betswms@gmail.com|pkirlin@gmail.com'
 
 # Ensure images are always available on nodes.
 prePuller:
