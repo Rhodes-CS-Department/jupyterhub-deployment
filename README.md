@@ -35,7 +35,8 @@ Quick links:
 * [JupyterHub and Docker configs](#jupyterhub-and-docker-configs)
   * [Configuring JupyterHub](#configuring-jupyterhub)
   * [Customizing the Docker image](#customizing-the-docker-image)
-      * [Testing locally](#testing-locally)
+    * [Testing locally](#testing-locally)
+    * [Manual building and pushing](#manual-building-and-pushing)
       * [Pushing the image to GCP](#pushing-the-image-to-gcp)
 * [Troubleshooting and Administration](#troubleshooting-and-administration)
   * [Viewing the cluster](#viewing-the-cluster)
@@ -257,11 +258,23 @@ Docker](https://hub.docker.com/editions/community/).
 
 In `config/Dockerfile`, make the desired changes.
 
-Then, when you want to build the image, run:
+Then, when you want to build and push the image, run:
 
-`docker build -t jserver -f config/Dockerfile config/`
+```
+./scripts/docker_build.sh
+```
 
-#### Testing locally
+This script will do the Docker build and prompt whether you want to push the
+newly-built image. 
+
+If you choose to test locally and push later, you can run the following to
+continue the push.
+
+```
+./scripts/docker_push.sh
+```
+
+### Testing locally
 
 You can confirm that the image was updated with `docker image ls`.
 
@@ -286,6 +299,12 @@ helpful to auto-reload them on changes:
 %load_ext autoreload
 %autoreload 2
 ```
+
+### Manual building and pushing
+
+To build the image:
+
+`docker build -t jserver -f config/Dockerfile config/`
 
 #### Pushing the image to GCP
 
