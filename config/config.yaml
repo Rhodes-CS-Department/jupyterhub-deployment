@@ -62,10 +62,10 @@ auth:
   type: custom
   custom:
     className: oauthenticator.generic.GenericOAuthenticator
-		config:
+    config:
       login_service: "OneLogin"
-      client_id: "client-id"
-      client_secret: "client-secret"
+      client_id: "***REMOVED***"
+      client_secret: "***REMOVED***"
       oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
       token_url: https://rhodes.onelogin.com/oidc/2/token
@@ -80,14 +80,18 @@ auth:
     users:
       - "parch-22@rhodes.edu"
       - "abuwa-23@rhodes.edu"
+      - "trenthem@rhodes.edu"
+      - "walkerd@rhodes.edu"
+      - "kirlinp@rhodes.edu"
       - "langm@rhodes.edu"
+      - "larkinsb@rhodes.edu"
+      - "sandersb@rhodes.edu"
+      - "sowellr@rhodes.edu"
+      - "welshc@rhodes.edu"
       - "langma@gmail.com"
       - "catie.welsh@gmail.com"
       - "betswms@gmail.com"
-      - "kirlinp@rhodes.edu"
       - "pkirlin@gmail.com"
-      - "larkinsb@rhodes.edu"
-      - "sowellr@rhodes.edu"
 
 
 # Ensure images are always available on nodes.
