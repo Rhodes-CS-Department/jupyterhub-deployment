@@ -26,8 +26,7 @@ echo
 echo "Validate the version appears below:"
 echo
 gcloud container images list-tags gcr.io/rhodes-cs/jserver
-
-
-
-
-
+echo
+echo "Update config/config.yaml to update the container image version to $RC_VERSION."
+echo "After updating, run scripts/helm_upgrade.sh to push the new config."
+echo
