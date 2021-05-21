@@ -13,7 +13,7 @@
   Follow instructions from
   [here](https://zero-to-jupyterhub.readthedocs.io/en/stable/administrator/advanced.html#arbitrary-extra-code-and-configuration-in-jupyterhub-config-py).
 * Update `README.md` with info about how logins are handled.
-* Update config with appropriate admin users (faculty + TLs).
+* ~~Update config with appropriate admin users (faculty + TLs).~~
 
 ### Parameter tweaking and GCP config
 
