@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Building Docker image..."
-echo docker build -t jserver -f config/Dockerfile config/
+docker build -t jserver -f config/Dockerfile config/
 
 if [ $? -ne 0 ]; then
   echo "Build failed!"
