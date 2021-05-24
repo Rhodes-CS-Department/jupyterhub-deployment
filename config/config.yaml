@@ -18,7 +18,7 @@ singleuser:
     name: gcr.io/rhodes-cs/jserver
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2020_02_18rc00
+    tag: 2021_05_24rc00
   # user resource limits
   memory:
     limit: 1G
@@ -43,7 +43,7 @@ singleuser:
           - "-c"
           - |
             pip install git+git://github.com/Rhodes-CS-Department/comp141-libraries.git
-            gitpuller https://github.com/Rhodes-CS-Department/comp141-sp21 main comp141-materials
+            gitpuller https://github.com/Rhodes-CS-Department/comp141-fa21 main comp141-fall21 
 
 cull:
   # kill servers idle for 1 hours, every hour.
@@ -51,47 +51,82 @@ cull:
   every: 3600
   enabled: true
 
-
 hub:
-  extraEnv:
-    OAUTH2_AUTHORIZE_URL: https://rhodes.onelogin.com/oidc/2/auth
-    OAUTH2_TOKEN_URL: https://rhodes.onelogin.com/oidc/2/token
-    OAUTH_CALLBACK_URL: https://rhodes-notebook.org/hub/oauth_callback
-
-auth:
-  type: custom
-  custom:
-    className: oauthenticator.generic.GenericOAuthenticator
-    config:
-      login_service: "OneLogin"
-      client_id: "***REMOVED***"
-      client_secret: "***REMOVED***"
-      oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
-      authorize_url: https://rhodes.onelogin.com/oidc/2/auth
-      token_url: https://rhodes.onelogin.com/oidc/2/token
-      userdata_url: https://rhodes.onelogin.com/oidc/2/me
-      userdata_method: GET
-      userdata_params: {'state': 'state'}
-      username_key: email
-      scope:
+  config:
+      Authenticator:
+        admin_users:
+        - parch-22@rhodes.edu
+        - abuwa-23@rhodes.edu
+        - trenthem@rhodes.edu
+        - walkerd@rhodes.edu
+        - kirlinp@rhodes.edu
+        - langm@rhodes.edu
+        - larkinsb@rhodes.edu
+        - sandersb@rhodes.edu
+        - sowellr@rhodes.edu
+        - welshc@rhodes.edu
+        - langma@gmail.com
+        - catie.welsh@gmail.com
+        - betswms@gmail.com
+        - pkirlin@gmail.com
+      GenericOAuthenticator:
+        authorize_url: https://rhodes.onelogin.com/oidc/2/auth
+        client_id: ***REMOVED***
+        client_secret: ***REMOVED***
+        login_service: OneLogin
+        oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
+        scope:
         - openid
         - profile
-  admin:
-    users:
-      - "parch-22@rhodes.edu"
-      - "abuwa-23@rhodes.edu"
-      - "trenthem@rhodes.edu"
-      - "walkerd@rhodes.edu"
-      - "kirlinp@rhodes.edu"
-      - "langm@rhodes.edu"
-      - "larkinsb@rhodes.edu"
-      - "sandersb@rhodes.edu"
-      - "sowellr@rhodes.edu"
-      - "welshc@rhodes.edu"
-      - "langma@gmail.com"
-      - "catie.welsh@gmail.com"
-      - "betswms@gmail.com"
-      - "pkirlin@gmail.com"
+        token_url: https://rhodes.onelogin.com/oidc/2/token
+        userdata_method: GET
+        userdata_params:
+          state: state
+        userdata_url: https://rhodes.onelogin.com/oidc/2/me
+        username_key: email
+      JupyterHub:
+        authenticator_class: oauthenticator.generic.GenericOAuthenticator
+
+ # hub:
+ #   extraEnv:
+ #     OAUTH2_AUTHORIZE_URL: https://rhodes.onelogin.com/oidc/2/auth
+ #     OAUTH2_TOKEN_URL: https://rhodes.onelogin.com/oidc/2/token
+ #     OAUTH_CALLBACK_URL: https://rhodes-notebook.org/hub/oauth_callback
+ # 
+ # auth:
+ #   type: custom
+ #   custom:
+ #     className: oauthenticator.generic.GenericOAuthenticator
+ #     config:
+ #       login_service: "OneLogin"
+ #       client_id: "***REMOVED***"
+ #       client_secret: "***REMOVED***"
+ #       oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
+ #       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
+ #       token_url: https://rhodes.onelogin.com/oidc/2/token
+ #       userdata_url: https://rhodes.onelogin.com/oidc/2/me
+ #       userdata_method: GET
+ #       userdata_params: {'state': 'state'}
+ #       username_key: email
+ #       scope:
+ #         - openid
+ #         - profile
+ #   admin:
+ #     users:
+ #       - "parch-22@rhodes.edu"
+ #       - "abuwa-23@rhodes.edu"
+ #       - "trenthem@rhodes.edu"
+ #       - "walkerd@rhodes.edu"
+ #       - "kirlinp@rhodes.edu"
+ #       - "langm@rhodes.edu"
+ #       - "larkinsb@rhodes.edu"
+ #       - "sandersb@rhodes.edu"
+ #       - "sowellr@rhodes.edu"
+ #       - "welshc@rhodes.edu"
+ #       - "langma@gmail.com"
+ #       - "catie.welsh@gmail.com"
+ #       - "betswms@gmail.com"
+ #       - "pkirlin@gmail.com"
 
 
 # Ensure images are always available on nodes.
