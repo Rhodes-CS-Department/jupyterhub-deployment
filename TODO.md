@@ -3,19 +3,19 @@
 ## Plan for Monday:
 
 1. Copy any disks that need to be copied for faculty.
-2. Decide whether to delete existing cluster or to update in-place.
-3. Create new cluster (or update machine type configs for existing).
+2. ~~Decide whether to delete existing cluster or to update in-place.~~
+3. ~~Create new cluster~~ (or update machine type configs for existing).
 4. If keeping existing, delete users and PVCs for existing users (this should
    reclaim PVs).
-5. Comb through configs, make sure nothing major has changed between 0.9.0 and
-   0.11.1.
-6. Update OneLogin config.
-7. Remove GitHub sync of Spring'21 repo.
-8. Create Fall'21 repo and add that to config.
-9. Bring up new cluster.
-10. Make sure that logins and libraries work with new cluster.
+5. ~~Comb through configs, make sure nothing major has changed between 0.9.0 and
+   0.11.1.~~
+6. ~~Update OneLogin config.~~
+7. ~~Remove GitHub sync of Spring'21 repo.~~
+8. ~~Create Fall'21 repo and add that to config.~~
+9. ~~Bring up new cluster.~~
+10. ~~Make sure that logins and libraries work with new cluster.~~
 11. Validate quota+autoscaling by bumping user placeholders to ~70.
-12. Rebuild docker image to pick up latest scipy image.
+12. ~~Rebuild docker image to pick up latest scipy image.~~
 13. Update README with any configuration changes.
 14. Update README with OneLogin documentation.
 15. File issues for ~August work (rebuild Docker image, anything else?).
