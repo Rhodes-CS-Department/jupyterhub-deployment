@@ -53,81 +53,39 @@ cull:
 
 hub:
   config:
-      Authenticator:
-        admin_users:
-        - parch-22@rhodes.edu
-        - abuwa-23@rhodes.edu
-        - trenthem@rhodes.edu
-        - walkerd@rhodes.edu
-        - kirlinp@rhodes.edu
-        - langm@rhodes.edu
-        - larkinsb@rhodes.edu
-        - sandersb@rhodes.edu
-        - sowellr@rhodes.edu
-        - welshc@rhodes.edu
-        - langma@gmail.com
-        - catie.welsh@gmail.com
-        - betswms@gmail.com
-        - pkirlin@gmail.com
-      GenericOAuthenticator:
-        authorize_url: https://rhodes.onelogin.com/oidc/2/auth
-        client_id: c0b3ff50-8b58-0139-1240-0a08f4c9941153544
-        client_secret: b5ebb63085a1318bca2a2815250d15ee82e4aea69f882a4e0e9d8ab27ff859a9
-        login_service: OneLogin
-        oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
-        scope:
-        - openid
-        - profile
-        token_url: https://rhodes.onelogin.com/oidc/2/token
-        userdata_method: GET
-        userdata_params:
-          state: state
-        userdata_url: https://rhodes.onelogin.com/oidc/2/me
-        username_key: email
-      JupyterHub:
-        authenticator_class: oauthenticator.generic.GenericOAuthenticator
-
- # hub:
- #   extraEnv:
- #     OAUTH2_AUTHORIZE_URL: https://rhodes.onelogin.com/oidc/2/auth
- #     OAUTH2_TOKEN_URL: https://rhodes.onelogin.com/oidc/2/token
- #     OAUTH_CALLBACK_URL: https://rhodes-notebook.org/hub/oauth_callback
- # 
- # auth:
- #   type: custom
- #   custom:
- #     className: oauthenticator.generic.GenericOAuthenticator
- #     config:
- #       login_service: "OneLogin"
- #       client_id: "c0b3ff50-8b58-0139-1240-0a08f4c9941153544"
- #       client_secret: "b5ebb63085a1318bca2a2815250d15ee82e4aea69f882a4e0e9d8ab27ff859a9"
- #       oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
- #       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
- #       token_url: https://rhodes.onelogin.com/oidc/2/token
- #       userdata_url: https://rhodes.onelogin.com/oidc/2/me
- #       userdata_method: GET
- #       userdata_params: {'state': 'state'}
- #       username_key: email
- #       scope:
- #         - openid
- #         - profile
- #   admin:
- #     users:
- #       - "parch-22@rhodes.edu"
- #       - "abuwa-23@rhodes.edu"
- #       - "trenthem@rhodes.edu"
- #       - "walkerd@rhodes.edu"
- #       - "kirlinp@rhodes.edu"
- #       - "langm@rhodes.edu"
- #       - "larkinsb@rhodes.edu"
- #       - "sandersb@rhodes.edu"
- #       - "sowellr@rhodes.edu"
- #       - "welshc@rhodes.edu"
- #       - "langma@gmail.com"
- #       - "catie.welsh@gmail.com"
- #       - "betswms@gmail.com"
- #       - "pkirlin@gmail.com"
-
+    Authenticator:
+      admin_users:
+      - parch-22@rhodes.edu
+      - abuwa-23@rhodes.edu
+      - trenthem@rhodes.edu
+      - walkerd@rhodes.edu
+      - kirlinp@rhodes.edu
+      - langm@rhodes.edu
+      - larkinsb@rhodes.edu
+      - sandersb@rhodes.edu
+      - sowellr@rhodes.edu
+      - welshc@rhodes.edu
+      - langma@gmail.com
+      - catie.welsh@gmail.com
+      - betswms@gmail.com
+      - pkirlin@gmail.com
+    GenericOAuthenticator:
+      authorize_url: https://rhodes.onelogin.com/oidc/2/auth
+      client_id: c0b3ff50-8b58-0139-1240-0a08f4c9941153544
+      client_secret: b5ebb63085a1318bca2a2815250d15ee82e4aea69f882a4e0e9d8ab27ff859a9
+      login_service: OneLogin
+      oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
+      scope:
+      - openid
+      - profile
+      token_url: https://rhodes.onelogin.com/oidc/2/token
+      userdata_method: GET
+      userdata_params:
+        state: state
+      userdata_url: https://rhodes.onelogin.com/oidc/2/me
+      username_key: email
+    JupyterHub:
+      authenticator_class: oauthenticator.generic.GenericOAuthenticator
 
 # Ensure images are always available on nodes.
 prePuller:
