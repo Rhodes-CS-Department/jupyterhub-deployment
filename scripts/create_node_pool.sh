@@ -1,7 +1,7 @@
 #!/bin/sh
 
-gcloud beta container node-pools create user-pool \
-  --machine-type n1-standard-2 \
+gcloud beta container node-pools create notebook-pool \
+  --machine-type n1-highmem-2 \
   --num-nodes 0 \
   --enable-autoscaling \
   --min-nodes 0 \
