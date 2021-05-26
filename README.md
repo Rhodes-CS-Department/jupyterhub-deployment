@@ -114,10 +114,15 @@ The JupyterHub deployment is configured in two ways:
   In this guide, there are instructions for configuring, building, and pushing
   this container image.
 
+Authentication is done via OneLogin. We have integrated with the Rhodes OneLogin
+production instance so that students and faculty can log in using their Rhodes
+credentials. The cluster is open to all Rhodes students, though we plan to clean
+up storage periodically.
+
 ## Distributing Files to Students
 
-__For Spring '21:__ All users automatically sync [this GitHub
-repo](https://github.com/Rhodes-CS-Department/comp141-sp21) on server start
+__For Fall '21:__ All users automatically sync [this GitHub
+repo](https://github.com/Rhodes-CS-Department/comp141-fa21) on server start
 (using nbgitpuller).
 
 The deployment is configured to automatically update Rhodes-specific libraries
@@ -132,7 +137,7 @@ cloning/updating a repo from the student.
 
 To distribute a repository to a student, first make the repository public and
 generate a URL for nbgitpuller using [this
-generator](https://jupyterhub.github.io/nbgitpuller/link?hub=https://rhodes-py.org&branch=main).
+generator](https://jupyterhub.github.io/nbgitpuller/link?hub=https://rhodes-notebook.org&branch=main).
 Some configuration has been pre-populated. The generated url can then be
 distributed to students (e.g., through Canvas).
 
@@ -142,23 +147,16 @@ when a user's server starts. Instructions are
 
 ### Working with GitHub and nbgitpuller
 
-As of Spring'21, the container image for servers does not contain ssh, so if you
+As of Fall'21, the container image for servers does not contain ssh, so if you
 use 2fa with GitHub, you will need to [create an access
 token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
 in order to use https authentication.
 
-Once you've done that, I think it'll helpful to cache this token for a while:
-
-```
-$ git config --global credential.helper cache
-$ git config --global credential.helper 'cache --timeout=1209600' # 2 weeks
-```
-
 Then, make sure you clone the repo to a separate directory than the
-`nbgitpuller` synced one (currently `comp141-materials`):
+`nbgitpuller` synced one (currently `comp141-fa21`):
 
 ```
-$ git clone https://github.com/Rhodes-CS-Department/comp141-sp21.git comp141-sp21
+$ git clone https://github.com/Rhodes-CS-Department/comp141-fa21.git comp141-development
 ```
 
 When making local changes to be reviewed/to shared resources, use a branch:
@@ -167,8 +165,8 @@ When making local changes to be reviewed/to shared resources, use a branch:
 $ git checkout -b <my local branch>
 ...
 $ git commit -m 'my changes'
-$ git push --set-upstream origin <my local branch>
-# after changes have been merged
+$ git push --set-upstream origin <my local branch> # use your token to login if using 2fa
+...
 $ git checkout main
 $ git pull
 ```
@@ -207,6 +205,7 @@ $ git stash pop # unstash changes in new branch
 1. Give your account permissions to perform all admin actions necessary by
    running `./scripts/cluster_permissions.sh your-google-account`
 1. Install [Docker](https://hub.docker.com/editions/community/).
+1. Run `gcloud auth configure-docker` in order to be able to push to `gcr.io`.
 1. Install [Helm](https://helm.sh) following the instruction
    [here](https://helm.sh/docs/intro/install/), or on MacOS, run `brew install
    helm` if you are using homebrew.
@@ -232,7 +231,8 @@ __configuration changes__ for the cluster should modify this file.
    helm repo update
    ```
 
-1. Now, install the chart configured by `config.yaml` by running this command:
+1. Now, to push changes to `config.yaml` to the cluster, run `helm upgrade`
+   using the included script:
 
    ```
    ./scripts/helm_upgrade.sh
@@ -273,6 +273,9 @@ continue the push.
 ```
 ./scripts/docker_push.sh
 ```
+
+__Important:__ Don't forget to update `config.yaml` with the new version tag and
+run `helm_upgrade.sh` to push the config.
 
 ### Testing locally
 
@@ -671,7 +674,7 @@ docs have information about debugging, and other FAQ topics.
 
 # Initial Cluster Setup
 
-These initial setup steps follow the [Zero to JupyterHub with Kubernetes
+The initial cluster setup was done using the [Zero to JupyterHub with Kubernetes
 guide](https://zero-to-jupyterhub.readthedocs.io/en/latest/).
 
 ## GCE project configuration
@@ -684,14 +687,6 @@ Outside of the guide, there are a few cloud resources that I manually set up.
   cluster's proxy server. This is configured in `config/config.yaml`. You can
   see this
   [here](https://console.cloud.google.com/networking/addresses/list?project=rhodes-cs).
-* In order to use Google authentication for the environment, this project is
-  configured as an app:
-  * I set up the project's OAuth [consent
-    screen](https://console.cloud.google.com/apis/credentials/consent?project=rhodes-cs)
-    and OAuth
-    [credentials](https://console.cloud.google.com/apis/credentials?project=rhodes-cs).
-  * The login flow is configured in `config/config.yaml` and uses these
-    credentials.
 
 ## Create Kubernetes cluster
 
