@@ -13,18 +13,19 @@ proxy:
 
 singleuser:
   image:
+    # Docker container used for spawning user servers.
     # Configured for Rhodes with required libraries installed.
     name: gcr.io/rhodes-cs/jserver
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2020_02_18rc00
+    tag: 2021_05_24rc00
   # user resource limits
   memory:
     limit: 1G
     guarantee: 1G
   cpu:
-    limit: 0.25
-    guarantee: 0.25
+    limit: 0.5
+    guarantee: 0.1
   storage:
     capacity: 1Gi
 
@@ -42,7 +43,7 @@ singleuser:
           - "-c"
           - |
             pip install git+git://github.com/Rhodes-CS-Department/comp141-libraries.git
-            gitpuller https://github.com/Rhodes-CS-Department/comp141-sp21 main comp141-materials
+            gitpuller https://github.com/Rhodes-CS-Department/comp141-fa21 main comp141-fall21 
 
 cull:
   # kill servers idle for 1 hours, every hour.
@@ -50,28 +51,41 @@ cull:
   every: 3600
   enabled: true
 
-
-auth:
-  type: google
-  google:
-    clientId: "522043863579-13f09sd50dvncm6q3bg6ri4kk43f5ksg.apps.googleusercontent.com"
-    clientSecret: "***REMOVED***"
-    callbackUrl: "https://rhodes-notebook.org/hub/oauth_callback"
-  admin:
-    users:
-      - "langm@rhodes.edu"
-      - "langma@gmail.com"
-      - "catie.welsh@gmail.com"
-      - "betswms@gmail.com"
-      - "kirlinp@rhodes.edu"
-      - "pkirlin@gmail.com"
-      - "larkinsb@rhodes.edu"
-      - "sowellr@rhodes.edu"
-
 hub:
-  extraConfig:
-    myAuthConfig: |
-      c.Authenticator.username_pattern = r'.*@rhodes.edu|langma@gmail.com|elise.rchards@gmail.com|catie.welsh@gmail.com|welshc.test@gmail.com|betswms@gmail.com|pkirlin@gmail.com'
+  config:
+    Authenticator:
+      admin_users:
+      - parch-22@rhodes.edu
+      - abuwa-23@rhodes.edu
+      - trenthem@rhodes.edu
+      - walkerd@rhodes.edu
+      - kirlinp@rhodes.edu
+      - langm@rhodes.edu
+      - larkinsb@rhodes.edu
+      - sandersb@rhodes.edu
+      - sowellr@rhodes.edu
+      - welshc@rhodes.edu
+      - langma@gmail.com
+      - catie.welsh@gmail.com
+      - betswms@gmail.com
+      - pkirlin@gmail.com
+    GenericOAuthenticator:
+      authorize_url: https://rhodes.onelogin.com/oidc/2/auth
+      client_id: ***REMOVED***
+      client_secret: ***REMOVED***
+      login_service: OneLogin
+      oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
+      scope:
+      - openid
+      - profile
+      token_url: https://rhodes.onelogin.com/oidc/2/token
+      userdata_method: GET
+      userdata_params:
+        state: state
+      userdata_url: https://rhodes.onelogin.com/oidc/2/me
+      username_key: email
+    JupyterHub:
+      authenticator_class: oauthenticator.generic.GenericOAuthenticator
 
 # Ensure images are always available on nodes.
 prePuller:
