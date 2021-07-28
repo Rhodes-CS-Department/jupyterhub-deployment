@@ -1,16 +1,14 @@
 # Rhodes Jupyter Environment
 
-__Known issues/warnings:__
-* If a user deletes a file, then the file is deleted from the `nbgitpuller`
-  origin repo, this can make a user's server inaccessible until the conflict is
-  fixed. Can be mitigated by switching from a single repo to per-assignment
-  repos (at least then the server is accessible).
-  * Tracked in issue
-  [#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
-  * Mitigation is to fix the user directory/repo 
-    (see [this section](#accessing-user-files-without-a-server)).
+Welcome to the Rhodes JupyterHub environment! This document contains:
 
-Quick links:
+1. An overview of JupyterHub and the JupyterHub-on-Kubernetes architecture.
+1. Information for faculty users of the JupyterHub environment.
+1. Information about how to configure and maintain the environment.
+1. Troubleshooting information.
+1. Documentation of the initial cluster design.
+
+Here are some quick links, a full table of contents follows:
 
 * [Notebook environment](https://rhodes-py.org)
 * [Admin page](https://rhodes-py.org/hub/admin)
@@ -28,35 +26,46 @@ Quick links:
 # Table of Contents
 (Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go))
 
-* [Cluster Architecture and Configuration](#cluster-architecture-and-configuration)
-  * [Distributing Files to Students](#distributing-files-to-students)
-    * [Working with GitHub and nbgitpuller](#working-with-github-and-nbgitpuller)
-* [Configure your local environment for administration](#configure-your-local-environment-for-administration)
-* [JupyterHub and Docker configs](#jupyterhub-and-docker-configs)
-  * [Configuring JupyterHub](#configuring-jupyterhub)
-  * [Customizing the Docker image](#customizing-the-docker-image)
-    * [Testing locally](#testing-locally)
-    * [Manual building and pushing](#manual-building-and-pushing)
-      * [Pushing the image to GCP](#pushing-the-image-to-gcp)
+* [Cluster Architecture and Deployment](#cluster-architecture-and-deployment)
+* [Teaching in the environment](#teaching-in-the-environment)
+   * [Logins](#logins)
+   * [Starting/restarting your server](#startingrestarting-your-server)
+   * [Accessing student servers](#accessing-student-servers)
+   * [Distributing Files to Students](#distributing-files-to-students)
+      * [Working with GitHub and nbgitpuller](#working-with-github-and-nbgitpuller)
+   * [COMP141 libraries](#comp141-libraries)
+   * [Additional libraries](#additional-libraries)
+   * [Integrating with okpy](#integrating-with-okpy)
+   * [Using multiple okpy endpoints](#using-multiple-okpy-endpoints)
+* [Configuring the environment](#configuring-the-environment)
+   * [Configure your local environment for administration](#configure-your-local-environment-for-administration)
+   * [Configuring JupyterHub](#configuring-jupyterhub)
+   * [Customizing the Docker image](#customizing-the-docker-image)
+      * [Testing locally](#testing-locally)
+      * [Manual building and pushing](#manual-building-and-pushing)
+         * [Pushing the image to GCP](#pushing-the-image-to-gcp)
 * [Troubleshooting and Administration](#troubleshooting-and-administration)
-  * [Viewing the cluster](#viewing-the-cluster)
-    * [Expected/example state](#expectedexample-state)
-      * [Service](#service)
-      * [Deployment](#deployment)
-      * [Pods](#pods)
-      * [Disk and claims](#disk-and-claims)
-  * [Viewing logs](#viewing-logs)
-  * [Administering user servers](#administering-user-servers)
-  * [Accessing user files without a server](#accessing-user-files-without-a-server)
-  * [Restarting deployments (not user servers)](#restarting-deployments-not-user-servers)
-  * [Manually scaling](#manually-scaling)
-  * [Installing and running the dashboard](#installing-and-running-the-dashboard)
-  * [Help docs](#help-docs)
+   * [Viewing the cluster](#viewing-the-cluster)
+      * [kubectl verbs](#kubectl-verbs)
+      * [Expected/example state](#expectedexample-state)
+         * [Service](#service)
+         * [Deployment](#deployment)
+         * [Pods](#pods)
+         * [Disk and claims](#disk-and-claims)
+   * [Viewing logs](#viewing-logs)
+   * [Administering user servers](#administering-user-servers)
+   * [Accessing user files without a server](#accessing-user-files-without-a-server)
+   * [Restarting deployments (not user servers)](#restarting-deployments-not-user-servers)
+   * [Manually scaling](#manually-scaling)
+   * [Installing and running the dashboard](#installing-and-running-the-dashboard)
+   * [Help docs](#help-docs)
 * [Initial Cluster Setup](#initial-cluster-setup)
-  * [GCE project configuration](#gce-project-configuration)
-  * [Create Kubernetes cluster](#create-kubernetes-cluster)
+   * [GCE project configuration](#gce-project-configuration)
+   * [Create Kubernetes cluster](#create-kubernetes-cluster)
+* [Known issues](#known-issues)
 
-# Cluster Architecture and Configuration
+
+# Cluster Architecture and Deployment
 
 First, a brief overview of how JupyterHub works:
 * There is a JupyterHub process running to manage single-user Jupyter servers.
@@ -119,11 +128,50 @@ production instance so that students and faculty can log in using their Rhodes
 credentials. The cluster is open to all Rhodes students, though we plan to clean
 up storage periodically.
 
+# Teaching in the environment
+
+## Logins
+
+Students and faculty use Rhodes [OneLogin](https://rhodes.onelogin.com) to log into their
+accounts. All Rhodes students have access to the cluster. 
+
+On first login, a user's storage is initialized. Note that student work is
+stored on separate disks; by default, the instructor cannot access the student
+filesystem, except through using the [admin panel](#accessing-student-servers)
+(although you can manually mount a student's disk, see [this
+section](#accessing-user-files-without-a-server) for more information).
+
+## Starting/restarting your server
+
+If you want to start or stop your server once logged in, click on "Control
+Panel" -- this will let you stop your currently-running server, and then restart
+it. You may need to advise students to do this if they haven't restarted in a
+long time and need to pick up library/file changes.
+
+## Accessing student servers
+
+Students may need help with their environment, or you may need to peek at
+student work.
+
+To access a student server, you have to be an administrator (configured in
+`config/config.yaml`). To access the admin panel, click "Control Panel" then
+"Admin" in the header bar of the environment. Here, you can see all student
+accounts and servers.  Click "access server" to access a student's server (you
+can also start or stop student servers from here as well).
+
+Note that even though there's a scary "authorize" button, your activity is not
+visible to the student.
+
 ## Distributing Files to Students
 
-__For Fall '21:__ All users automatically sync [this GitHub
-repo](https://github.com/Rhodes-CS-Department/comp141-fa21) on server start
+__For Summer '21:__ All users automatically sync [this GitHub
+repo](https://github.com/Rhodes-CS-Department/fa21-premester) on server start
 (using nbgitpuller).
+
+__For Fall '21:__ All users will automatically sync [this GitHub
+repo](https://github.com/Rhodes-CS-Department/comp141-fa21) on server start
+(using nbgitpuller). __Tracked in
+[#18](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/18)__.
 
 The deployment is configured to automatically update Rhodes-specific libraries
 when a user logs in, by running `pip install` on [this
@@ -179,7 +227,98 @@ $ git checkout -b <branch>
 $ git stash pop # unstash changes in new branch
 ```
 
-# Configure your local environment for administration
+## COMP141 libraries
+
+We use Rhodes-specific Python libraries for many assignments, which can be found
+in [this repo](https://github.com/Rhodes-CS-Department/comp141-libraries).
+
+These libraries are installed at every server startup, so any changes will be
+propagated to student servers and do not require a notebook environment restart.
+
+## Additional libraries
+
+If you want to use additional libraries for your course, they must be added to
+the server docker image. Please file an
+[issue](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/new/choose)
+for the student admins to install the library on the deployed image, or follow
+the instructions in the [Customizing the Docker
+Image](#customizing-the-docker-image) section.
+
+## Integrating with okpy
+
+We use [okpy](https://okpy.org) for student notebook submissions. Since okpy
+only supports Google for authentication, students need to log in to okpy with a
+Google account. In the past, we had students create Google accounts that
+corresponded to their Rhodes email (see
+[here](https://matthewlang.github.io/comp141/using_ok.html), for example) in
+order to access the environment. Since we have moved to OneLogin, students no
+longer do this. 
+
+You can still require students to do so, or you can collect email accounts from
+them. Then, you can use a setup like this for students in your course:
+
+<img
+src="https://storage.googleapis.com/comp141-public/configure_students.png"/>
+
+## Using multiple okpy endpoints
+
+Okpy is difficult to use with multiple instructors in the same course shell.
+However, okpy config files require a course shell endpoint in order to submit
+student work. The `c1.notebooks`
+[library](https://github.com/Rhodes-CS-Department/comp141-libraries/blob/main/cs1/notebooks.py) in the 
+[comp141-libraries](https://github.com/Rhodes-CS-Department/comp141-libraries)
+allows instructors to distribute a template okpy config file with assigments.
+
+Instead of distributing a `foo.ok` config file for assignment `foo`, instructors
+will distribute a template file. The COMP141 library will create the correct
+`foo.ok` config file from the template.
+
+Template files must be named `.template.ok` (notice the `.`) and can contain an
+endpoint placeholder value (`<#endpoint#>`). For example:
+
+```
+{
+  "name": "Program 08",
+  "endpoint": "<#endpoint#>/project08",
+  "src": [
+    "P8.ipynb",
+    "imgfilter.py"
+  ],
+  "tests": {
+      "tests/q*.py": "ok_test"
+  },
+  "protocols": [
+      "file_contents",
+      "grading",
+      "backup"
+  ]
+}
+```
+
+This allows for course instructors to distribute a single template file per
+project/lab, and for students to fill in the endpoint for their specific
+instructor (allowing multiple instructors to have different endpoints).
+
+The endpoint options should be JSON-encoded and can be distributed in a file
+named `.options` or will be pulled from the following url:
+[](https://storage.googleapis.com/comp141-public/options.json).
+
+When a student runs the `ok_login` code...
+```
+from cs1.notebooks import *
+ok_login('p8.ok')
+```
+they will be prompted to select an endpoint. 
+
+Endpoint selection is cached and will be used to automatically populate future
+template assignments (e.g., this needs to be done once per semester).
+
+See [this PR](https://github.com/Rhodes-CS-Department/comp141-libraries/pull/5)
+for more info.
+
+# Configuring the environment
+
+## Configure your local environment for administration
 
 1. Install `gcloud` via its [install page](https://cloud.google.com/sdk/install)
    and log in to the Rhodes CS project.
@@ -210,7 +349,6 @@ $ git stash pop # unstash changes in new branch
    [here](https://helm.sh/docs/intro/install/), or on MacOS, run `brew install
    helm` if you are using homebrew.
 
-# JupyterHub and Docker configs
 
 ## Configuring JupyterHub
 
@@ -695,4 +833,15 @@ Outside of the guide, there are a few cloud resources that I manually set up.
 1. Create a pool of user nodes by running `./scripts/create_node_pool.sh` (you
    might have to update your Cloud SDK to install beta components).
 
+
+# Known issues
+
+* If a user deletes a file, then the file is deleted from the `nbgitpuller`
+  origin repo, this can make a user's server inaccessible until the conflict is
+  fixed. Can be mitigated by switching from a single repo to per-assignment
+  repos (at least then the server is accessible).
+  * Tracked in issue
+  [#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
+  * Mitigation is to fix the user directory/repo 
+    (see [this section](#accessing-user-files-without-a-server)).
 
