@@ -37,6 +37,7 @@ Here are some quick links, a full table of contents follows:
    * [Additional libraries](#additional-libraries)
    * [Integrating with okpy](#integrating-with-okpy)
    * [Using multiple okpy endpoints](#using-multiple-okpy-endpoints)
+   * [Tips for authoring assignments](#tips-for-authoring-assignments)
 * [Configuring the environment](#configuring-the-environment)
    * [Configure your local environment for administration](#configure-your-local-environment-for-administration)
    * [Configuring JupyterHub](#configuring-jupyterhub)
@@ -301,20 +302,29 @@ instructor (allowing multiple instructors to have different endpoints).
 
 The endpoint options should be JSON-encoded and can be distributed in a file
 named `.options` or will be pulled from the following url:
-[](https://storage.googleapis.com/comp141-public/options.json).
+[https://storage.googleapis.com/comp141-public/options.json]().
 
 When a student runs the `ok_login` code...
 ```
 from cs1.notebooks import *
 ok_login('p8.ok')
 ```
-they will be prompted to select an endpoint. 
+they will be prompted to select an endpoint and the file `p8.ok` will be dropped
+in the directory with the correct endpoint.
 
 Endpoint selection is cached and will be used to automatically populate future
 template assignments (e.g., this needs to be done once per semester).
 
 See [this PR](https://github.com/Rhodes-CS-Department/comp141-libraries/pull/5)
 for more info.
+
+## Tips for authoring assignments
+
+* It is preferable to use the `cs1.notebooks` wrapper for a lot of things, it
+  automates logging the student in if they are logged out.
+* Use the lock cells feature to lock cells you don't want students to edit.
+* Use dependent cell execution if you want to make sure that cells are executed
+  in a certain order (e.g., an earlier cell is a precondition for a later one).
 
 # Configuring the environment
 
