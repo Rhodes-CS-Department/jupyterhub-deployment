@@ -57,6 +57,7 @@ hub:
   config:
     Authenticator:
       admin_users:
+      - superdockm@rhodes.edu  
       - parch-22@rhodes.edu
       - abuwa-23@rhodes.edu
       - trenthem@rhodes.edu
