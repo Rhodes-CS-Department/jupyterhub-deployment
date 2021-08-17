@@ -43,7 +43,7 @@ singleuser:
           - "-c"
           - |
             pip install git+git://github.com/Rhodes-CS-Department/comp141-libraries.git
-            gitpuller https://github.com/Rhodes-CS-Department/fa21-premester main comp141-premester
+            gitpuller https://github.com/Rhodes-CS-Department/comp141-fa21 main comp141-fa21
 
 cull:
   # kill servers idle for 1 hours, every hour.
