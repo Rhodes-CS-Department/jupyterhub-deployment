@@ -196,6 +196,15 @@ when a user's server starts. Instructions are
 
 ### Working with GitHub and nbgitpuller
 
+__WARNING:__ It is a best practice to __not__ delete or rename files in git
+after they have been cloned by students. The merge behavior for `gitpuller` is
+permissive, but has difficulty resolving some conflicts, particularly conflicts
+where a file has been created/renamed in one branch and deleted in another.
+__For your sanity, don't move or remove files after they are in students'
+hands!__ See [Known issues](#known-issues), particularly
+[#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
+__END WARNING__
+
 As of Fall'21, the container image for servers does not contain ssh, so if you
 use 2fa with GitHub, you will need to [create an access
 token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
@@ -865,4 +874,3 @@ Outside of the guide, there are a few cloud resources that I manually set up.
   [#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
   * Mitigation is to fix the user directory/repo 
     (see [this section](#accessing-user-files-without-a-server)).
-
