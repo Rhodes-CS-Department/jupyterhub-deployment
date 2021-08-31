@@ -673,6 +673,17 @@ kubectl get pods -n jhub
 kubectl logs <pod name> -n jhub
 ```
 
+__Note:__ Logs for the post-startup script are not collected, since these are
+commands run inside the pod, after it has started. The logs for the `pip
+install` of the COMP141 libraries and `nbgitpuller` are redirected to
+`/tmp/startup_logs` which can be viewed by logging into the student's server.
+These __do not persist__ across pod restarts.
+
+See [this issue](https://github.com/kubernetes/kubernetes/issues/16412) for
+context. If `postStart` fails, this would be published as an event for the pod;
+however, we swallow failures in our startup script, and therefore no events are
+published.
+
 ## Administering user servers
 
 The easiest way to administer user servers is via the
