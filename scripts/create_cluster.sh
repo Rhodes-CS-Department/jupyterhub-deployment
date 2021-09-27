@@ -5,4 +5,5 @@ gcloud container clusters create \
   --num-nodes 1 \
   --zone us-central1-a \
   --cluster-version latest \
+  --release-channel stable \
   jupyter
