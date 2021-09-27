@@ -843,6 +843,10 @@ Outside of the guide, there are a few cloud resources that I manually set up.
 1. Create a pool of user nodes by running `./scripts/create_node_pool.sh` (you
    might have to update your Cloud SDK to install beta components).
 
+The cluster creation script enrolls the cluster in the GKE `stable` release
+channel, which will cause the cluster to receive automatic version updates from
+GCP. This in turn results in the node pools receiving image version updates.
+
 
 # Known issues
 
