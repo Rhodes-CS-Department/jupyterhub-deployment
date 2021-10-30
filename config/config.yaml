@@ -108,7 +108,11 @@ scheduling:
     userPlaceholderPriority: -10
   userPlaceholder:
     # Hold extra spots for new arrivals.
-    replicas: 3
+    # n1-highmem-2 has 2 vCPU and 13GB core. With overhead, this is ~10
+    # severs/node. Reserving 10 slots for new arrivals optimizes for start time
+    # by overprovisioning by one node.
+    # TODO: reduce overprovisioning during trough usage.
+    replicas: 10
   # Pin user pods to user pool.
   userPods:
     nodeAffinity:
