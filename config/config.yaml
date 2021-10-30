@@ -18,7 +18,7 @@ singleuser:
     name: gcr.io/rhodes-cs/jserver
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2021_10_30rc00
+    tag: 2021_10_30rc01
   # user resource limits
   memory:
     limit: 1G
@@ -46,7 +46,6 @@ singleuser:
           - "sh"
           - "-c"
           - |
-            pip install git+git://github.com/Rhodes-CS-Department/comp141-libraries.git 2>&1 | tee -a /tmp/startup_log
             gitpuller https://github.com/Rhodes-CS-Department/comp141-fa21 main comp141-fa21 --skip_rename --retry_merge 2>&1 | tee -a /tmp/startup_log
             rm -rf comp141-materials
             rm -rf comp141-premester

@@ -53,3 +53,6 @@ RUN jupyter nbextension enable spellchecker/main --sys-prefix
 RUN pip install --no-cache-dir beautifulsoup4
 # Install RISE for slideshows
 RUN pip install --no-cache-dir RISE
+
+# Install COMP141 libraries
+RUN pip install git+git://github.com/Rhodes-CS-Department/comp141-libraries.git
