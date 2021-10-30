@@ -14,16 +14,27 @@ RUN ln -s /usr/bin/vim.tiny /usr/local/bin/vim
 USER $NB_UID
 
 # Required libraries for 141
+
+# Required for cs1-libraries
 RUN pip install --no-cache-dir ipycanvas
 RUN pip install --no-cache-dir ipyevents
-RUN pip install --no-cache-dir nbgitpuller
+RUN pip install --no-cache-dir jupyter-ui-poll 
+
+# Note: we use a forked version of nbgitpuller to loosen some semantics when
+# merging. This forked version has additional flags that control some behavior
+# we find undesireable in the upstream version. If we revert to the released
+# version of nbgitpuller, the flags in config/config.yaml must be updated.
+# RUN pip install --no-cache-dir nbgitpuller
+RUN pip install --no-cache-dir git+https://github.com/Rhodes-CS-Department/nbgitpuller.git
+
 RUN pip install --no-cache-dir okpy
-RUN pip install --no-cache-dir jupyter-ui-poll # 141 libs dependency
 
 # Dependencies for extensions
+
 RUN pip install --no-cache-dir yapf
 
 # Jupyter extensions
+
 RUN pip install --no-cache-dir jupyter_contrib_nbextensions
 RUN jupyter contrib nbextension install --sys-prefix
 # Extensions enabled by default
@@ -38,6 +49,7 @@ RUN jupyter nbextension enable code_font_size/code_font_size --sys-prefix
 RUN jupyter nbextension enable spellchecker/main --sys-prefix
 
 # Optional libraries
+
 RUN pip install --no-cache-dir beautifulsoup4
 # Install RISE for slideshows
 RUN pip install --no-cache-dir RISE

@@ -196,6 +196,15 @@ when a user's server starts. Instructions are
 
 ### Working with GitHub and nbgitpuller
 
+__WARNING:__ It is a best practice to __not__ delete or rename files in git
+after they have been cloned by students. The merge behavior for `gitpuller` is
+permissive, but has difficulty resolving some conflicts, particularly conflicts
+where a file has been created/renamed in one branch and deleted in another.
+__For your sanity, don't move or remove files after they are in students'
+hands!__ See [Known issues](#known-issues), particularly
+[#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
+__END WARNING__
+
 As of Fall'21, the container image for servers does not contain ssh, so if you
 use 2fa with GitHub, you will need to [create an access
 token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
@@ -673,6 +682,17 @@ kubectl get pods -n jhub
 kubectl logs <pod name> -n jhub
 ```
 
+__Note:__ Logs for the post-startup script are not collected, since these are
+commands run inside the pod, after it has started. The logs for the `pip
+install` of the COMP141 libraries and `nbgitpuller` are redirected to
+`/tmp/startup_logs` which can be viewed by logging into the student's server.
+These __do not persist__ across pod restarts.
+
+See [this issue](https://github.com/kubernetes/kubernetes/issues/16412) for
+context. If `postStart` fails, this would be published as an event for the pod;
+however, we swallow failures in our startup script, and therefore no events are
+published.
+
 ## Administering user servers
 
 The easiest way to administer user servers is via the
@@ -858,4 +878,3 @@ GCP. This in turn results in the node pools receiving image version updates.
   [#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
   * Mitigation is to fix the user directory/repo 
     (see [this section](#accessing-user-files-without-a-server)).
-
