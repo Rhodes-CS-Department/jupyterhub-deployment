@@ -1,8 +1,30 @@
-# Viewing config data in helm
+# TODO
+
+- expose grafana externally
+- set up grafana + prometheus persistence on PVs
+  - [grafana
+    configs](https://github.com/grafana/helm-charts/blob/main/charts/grafana/README.md) 
+  - prometheus is already aneabled; increase volume size
+    ```
+    [lang@eschaton ~/dsrc/jupyter]$ kubectl -n prometheus get pvc
+    NAME                      STATUS   VOLUME
+    CAPACITY   ACCESS MODES   STORAGECLASS   AGE
+    prometheus-alertmanager   Bound    pvc-3f75416a-4a1d-4c2e-8342-b162c0c30674
+    2Gi        RWO            standard       57m
+    prometheus-server         Bound    pvc-52fdffc6-87f3-41b7-9eaf-4786d14cc530
+    8Gi        RWO            standard       57m
+    ```
+
+#### Viewing config data in helm
 
 ```
 helm show values [chart name]
 ```
+
+# Enable scraping
+
+By default the `/metrics` endpoints in JupyterHub require authentication;
+disable with `authenticate_prometheus: false`.
 
 # Installing Prometheus
 
