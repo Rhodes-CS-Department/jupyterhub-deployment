@@ -501,6 +501,19 @@ e05babc291c6                         2021-01-24T21:32:16
 6d4d44ff86d5                         2020-12-19T18:13:00
 ```
 
+### Misc environment management
+
+#### kubectl contexts
+
+`kubectl` uses config profiles called "contexts" in order to interact with k8s
+clusters. `glcoud config cluster create...` called by the initial cluster setup  will
+configure the context autmatically. The instructions above under [configuring
+your environment](#configure-your-local-environment-for-administration) describe
+how to use `gcloud` to create a context for the department cluster.
+
+If you are administering multiple k8s clusters, use `kubectl config
+get-contexts` and `kubectl config set-context` to switch between clusters.
+
 # Troubleshooting and Administration
 
 ## Viewing the cluster

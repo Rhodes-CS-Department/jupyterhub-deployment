@@ -1,15 +1,14 @@
 proxy:
-  secretToken: "***REMOVED***"
+  secretToken: "b2bb96a1192663038c58fb58fecf9f4d95f582f4c6a6e1a179652fa7773334e7"
   # Use static IP
   service:
-    loadBalancerIP: 35.225.189.212
+    loadBalancerIP: 34.68.192.138 
   https:
-    enabled: true
-    hosts:
-      - rhodes-notebook.org
-      - rhodes-py.org
-    letsencrypt:
-      contactEmail: langma@gmail.com
+    enabled: false
+      #hosts:
+      #  - lang-notebook.org
+      #letsencrypt:
+      #  contactEmail: langma@gmail.com
 
 singleuser:
   image:
@@ -60,38 +59,15 @@ hub:
   config:
     Authenticator:
       admin_users:
-      - superdockm@rhodes.edu  
-      - parch-22@rhodes.edu
-      - abuwa-23@rhodes.edu
-      - trenthem@rhodes.edu
-      - walkerd@rhodes.edu
-      - kirlinp@rhodes.edu
-      - langm@rhodes.edu
-      - larkinsb@rhodes.edu
-      - sandersb@rhodes.edu
-      - sowellr@rhodes.edu
-      - welshc@rhodes.edu
-      - langma@gmail.com
-      - catie.welsh@gmail.com
-      - betswms@gmail.com
-      - pkirlin@gmail.com
-    GenericOAuthenticator:
-      authorize_url: https://rhodes.onelogin.com/oidc/2/auth
-      client_id: ***REMOVED***
-      client_secret: ***REMOVED***
-      login_service: OneLogin
-      oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
-      scope:
-      - openid
-      - profile
-      token_url: https://rhodes.onelogin.com/oidc/2/token
-      userdata_method: GET
-      userdata_params:
-        state: state
-      userdata_url: https://rhodes.onelogin.com/oidc/2/me
-      username_key: email
+        - lang
+      allowed_users:
+        - lang
+        - matt
+    DummyAuthenticator:
+      password: uhoh
     JupyterHub:
-      authenticator_class: oauthenticator.generic.GenericOAuthenticator
+      authenticate_prometheus: false
+      authenticator_class: dummy
 
 # Ensure images are always available on nodes.
 prePuller:
