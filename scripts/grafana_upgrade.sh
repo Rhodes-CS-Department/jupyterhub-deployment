@@ -7,5 +7,5 @@ helm upgrade --cleanup-on-fail \
   --install $RELEASE grafana/grafana \
   --namespace $NAMESPACE \
   --create-namespace \
-  --values config/grafana_config.yaml \
+  --values config/grafana.yaml \
   --set global.safeToShowValues=true

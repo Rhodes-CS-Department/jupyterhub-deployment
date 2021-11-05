@@ -2,9 +2,18 @@ datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
-    - name: Prometheus
+    - name: prometheus
       type: prometheus
+      uid: prometheus
       url: http://prometheus-server.prometheus.svc.cluster.local
       access: proxy
       isDefault: true
+
+persistence:
+  type: pvc
+  enabled: true
+  size: 1Ti
+
+service:
+  type: LoadBalancer
 

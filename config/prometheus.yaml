@@ -1,0 +1,12 @@
+server:
+  retention: 120d
+  global:
+    scrape_interval: 30s
+  persistentVolume:
+    enabled: true
+    size: 1Ti
+alertmanager:
+  persistentVolume:
+    enabled: true
+    size: 20Gi
+

@@ -1,19 +1,7 @@
 # TODO
 
-- expose grafana externally
-- set up grafana + prometheus persistence on PVs
-  - [grafana
-    configs](https://github.com/grafana/helm-charts/blob/main/charts/grafana/README.md) 
-  - prometheus is already aneabled; increase volume size
-    ```
-    [lang@eschaton ~/dsrc/jupyter]$ kubectl -n prometheus get pvc
-    NAME                      STATUS   VOLUME
-    CAPACITY   ACCESS MODES   STORAGECLASS   AGE
-    prometheus-alertmanager   Bound    pvc-3f75416a-4a1d-4c2e-8342-b162c0c30674
-    2Gi        RWO            standard       57m
-    prometheus-server         Bound    pvc-52fdffc6-87f3-41b7-9eaf-4786d14cc530
-    8Gi        RWO            standard       57m
-    ```
+- Use LoadBalancerIP vs. LoadBalancer for Grafana
+- Get cert and restrict external Grafana to https
 
 #### Viewing config data in helm
 
@@ -48,8 +36,7 @@ helm repo update
 # get default password
 kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
 # port-forward server to localhost
-export POD_NAME=$(kubectl get pods --namespace grafana -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o
-jsonpath="{.items[0].metadata.name}")
+export POD_NAME=$(kubectl get pods --namespace grafana -l "app.kubernetes.io/name=grafana,app.kubernetes.io/instance=grafana" -o jsonpath="{.items[0].metadata.name}")
 kubectl --namespace grafana port-forward $POD_NAME 3000
 
 ```

@@ -367,6 +367,8 @@ for more info.
 1. Install [Helm](https://helm.sh) following the instruction
    [here](https://helm.sh/docs/intro/install/), or on MacOS, run `brew install
    helm` if you are using homebrew.
+1. (optionally) Install `jsonnet` in order to edit/push Grafana dashboards
+   (`brew install jsonnet`).
 
 
 ## Configuring JupyterHub
@@ -879,6 +881,53 @@ Outside of the guide, there are a few cloud resources that I manually set up.
 The cluster creation script enrolls the cluster in the GKE `stable` release
 channel, which will cause the cluster to receive automatic version updates from
 GCP. This in turn results in the node pools receiving image version updates.
+
+## Dashboard installation
+
+1. Install and update Prometheus via `scripts/prometheus_update.sh`
+1. Install and update Grafana via `scripts/prometheus_update.sh`
+1. Create a [Grafana API
+   Key](https://grafana.com/docs/grafana/latest/http_api/auth/)
+1. Build and push [JupyterHub Grafana
+   Dashboards](https://github.com/jupyterhub/grafana-dashboards)
+
+### Build and push dashboards
+
+```
+# Set token environement variable
+source config/grafana_api_key.sh
+
+# Get server IP address
+export GRAFANA_IP=$(kubectl get svc --namespace grafana grafana -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+# Clone and push dashboards
+mkdir scratch
+git clone https://github.com/jupyterhub/grafana-dashboards.git scratch/grafana-dashboards
+cd scratch/grafana-dashboards
+./deploy.py $GRAFANA_IP
+```
+
+
+### Proxying Prometheus
+
+```
+export PROM_POD_NAME=$(kubectl get pods --namespace prometheus -l "app=prometheus,component=server" -o jsonpath="{.items[0].metadata.name}")
+kubectl --namespace prometheus port-forward $PROM_POD_NAME 9090
+```
+
+### Viewing Grafana
+
+Get the Grafana public IP:
+
+```
+kubectl get svc --namespace grafana grafana -o jsonpath='{.status.loadBalancer.ingress[0].ip}'
+```
+
+Get the admin password: 
+
+```
+kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
+```
 
 
 # Known issues
