@@ -8,5 +8,5 @@ helm upgrade --cleanup-on-fail \
   --namespace $NAMESPACE \
   --create-namespace \
   --version=0.11.1 \
-  --values config/config.yaml \
+  --values config/jupyter.yaml \
   --set global.safeToShowValues=true
