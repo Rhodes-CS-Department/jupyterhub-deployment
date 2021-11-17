@@ -43,12 +43,12 @@ singleuser:
         # revert to the default version, we must update the gitpuller command
         # below to elide the flags.
         command:
-          - "sh"
-          - "-c"
-          - |
-            gitpuller https://github.com/Rhodes-CS-Department/comp141-fa21 main comp141-fa21 --skip_rename --retry_merge 2>&1 | tee -a /tmp/startup_log
-            rm -rf comp141-materials
-            rm -rf comp141-premester
+          [
+            "sh",
+            "-c", 
+            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-fa21 main comp141-fa21 --skip_rename --retry_merge \
+             || gitpuller https://github.com/Rhodes-CS-Department/comp141-fa21 main comp141-fa21 ; } 2>&1 | tee -a /tmp/startup_log",
+          ]
 
 cull:
   # kill servers idle for 1 hours, every hour.
