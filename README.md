@@ -673,9 +673,6 @@ for deleting PVCs when a user is deleted. Users can be deleted via the UI or via
 the tool in `scripts/tools` (see the section on [culling
 users](#culling-users)).
 
-Since we are talking about a few hundred GB for a year or so, the cost is not
-that high, and we might just consider redeploying the entire cluster yearly.
-
 ## Viewing logs
 
 You can view logs in two ways: using `kubectl` or using the [Cloud Log
