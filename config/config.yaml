@@ -39,6 +39,10 @@ singleuser:
 
   # sorry.
   extraEnv:
+    # default to old server app.
+    # TODO(langm): Update to jupyter_server.serverapp.ServerApp and use
+      # nbclassic to reskin the UI.
+    JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
     # sorry.
     EDITOR: "vim"
 
