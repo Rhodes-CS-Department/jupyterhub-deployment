@@ -34,6 +34,9 @@ singleuser:
   storage:
     capacity: 1Gi
 
+  # default to pre-JupyterLab interface.
+  defaultUrl: /tree
+
   # sorry.
   extraEnv:
     # sorry.
