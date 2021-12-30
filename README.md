@@ -661,12 +661,17 @@ persistent disks.
 
 When volume claims are deleted, so are the corresponding disks (reclaim policy).
 
-Note that right now there is not a great way to delete PVCs when a user is
+~~Note that right now there is not a great way to delete PVCs when a user is
 deleted. There is a
 [discussion](https://discourse.jupyter.org/t/a-cull-idle-user-service-that-deletes-pvs/4742/11)
 about this and issues tracked
 [here](https://github.com/jupyterhub/jupyterhub-idle-culler/issues/8) and
-[here](https://github.com/jupyterhub/kubespawner/issues/446).
+[here](https://github.com/jupyterhub/kubespawner/issues/446).~~
+
+As of 12/30/21, we have deployed a new JupyterHub version that includes a hook
+for deleting PVCs when a user is deleted. Users can be deleted via the UI or via
+the tool in `scripts/tools` (see the section on [culling
+users](#culling-users)).
 
 Since we are talking about a few hundred GB for a year or so, the cost is not
 that high, and we might just consider redeploying the entire cluster yearly.
