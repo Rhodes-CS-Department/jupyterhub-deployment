@@ -10,6 +10,11 @@ proxy:
       - rhodes-py.org
     letsencrypt:
       contactEmail: langma@gmail.com
+  chp:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
 
 singleuser:
   image:
@@ -57,6 +62,10 @@ cull:
   enabled: true
 
 hub:
+  resources:
+		requests:
+      cpu: 200m
+      memory: 512Mi
   config:
     Authenticator:
       admin_users:
@@ -92,13 +101,24 @@ hub:
       username_key: email
     JupyterHub:
       authenticator_class: oauthenticator.generic.GenericOAuthenticator
+    # Delete a user's PVC when the user is deleted.
+    KubeSpawner:
+      delete_pvc: true
 
 # Ensure images are always available on nodes.
 prePuller:
   hook:
     enabled: true
+    resources:
+      requests:
+        cpu: 0
+        memory: 0
   continuous:
     enabed: true
+  resources:
+    requests:
+      cpu: 0
+      memory: 0
 
 scheduling:
   podPriority:
@@ -121,3 +141,7 @@ scheduling:
   # least-loaded).
   userScheduler:
     enabled: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
