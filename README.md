@@ -59,6 +59,7 @@ Here are some quick links, a full table of contents follows:
    * [Restarting deployments (not user servers)](#restarting-deployments-not-user-servers)
    * [Manually scaling](#manually-scaling)
    * [Installing and running the dashboard](#installing-and-running-the-dashboard)
+   * [Culling users](#culling-users)
    * [Help docs](#help-docs)
 * [Initial Cluster Setup](#initial-cluster-setup)
    * [GCE project configuration](#gce-project-configuration)
@@ -833,6 +834,28 @@ Kubernetes API server. The dashboard is accessible at
 
 Use the token you copied to log in. Select the namespace `jhub` from the
 namespace drop down to view the JupyterHub telemetry.
+
+## Culling users
+
+There is Python code to remove users (and PVCs) under `scripts/tools`.
+
+To run, you will need to grant yourself an OAuth token to use for the script to
+take action on your behalf. From the [token
+page](https://rhodes-notebook.org/hub/token) click "Request new API token" and
+copy the token that is generated.
+
+Then, to run the script, first run in dry run mode (default), to see that the
+users that will be deleted are expected:
+
+```
+pipenv run python cull_users.py --token YOUR_OAUTH_TOKEN
+```
+
+Then, run the script in non-dry run mode:
+
+```
+pipenv run python cull_users.py --token YOUR_OAUTH_TOKEN --no_dry_run
+```
 
 ## Help docs
 
