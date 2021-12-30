@@ -2,6 +2,7 @@ import argparse
 import logging
 import requests
 import sys
+import time
 
 
 def get_users(endpoint, token):
@@ -35,6 +36,7 @@ def cull_user(user, endpoint, token, dry_run=True):
 
     # Delete user.
     if not dry_run:
+        logging.info('Deleteing uesr %s' % name)
         r = requests.delete(endpoint + f'/users/{name}',
                             headers={
                                 'Authorization': f'token {token}',
@@ -59,7 +61,7 @@ def cull_users(endpoint, token, dry_run=True, cull_admin=False):
 
 def main():
     parser = argparse.ArgumentParser(description='Cull user profiles')
-    parser.add_argument('--dry_run', type=bool, default=True,
+    parser.add_argument('--no_dry_run', action='store_true',
                         help='Whether to actually perform update operations')
     parser.add_argument('--token', type=str,
                         default='',
@@ -70,7 +72,14 @@ def main():
     args = vars(parser.parse_args())
     logging.basicConfig(stream=sys.stdout, level=logging.INFO,
                         format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')
-    cull_users(args['api'], args['token'], args['dry_run'])
+    logging.info(args)
+    dry_run = not args['no_dry_run']
+    logging.info('Dry run: %s' % dry_run)
+    if not dry_run:
+        print('WARNING: Not a dry run. Ctrl-C to quit if you do not want to delete users')
+        time.sleep(5)
+
+    cull_users(args['api'], args['token'], dry_run=dry_run)
 
 
 if __name__ == '__main__':
