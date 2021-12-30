@@ -166,14 +166,8 @@ visible to the student.
 
 ## Distributing Files to Students
 
-__For Summer '21:__ All users automatically sync [this GitHub
-repo](https://github.com/Rhodes-CS-Department/fa21-premester) on server start
-(using nbgitpuller).
-
-__For Fall '21:__ All users will automatically sync [this GitHub
-repo](https://github.com/Rhodes-CS-Department/comp141-fa21) on server start
-(using nbgitpuller). __Tracked in
-[#18](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/18)__.
+__For Spring '22:__ All users automatically sync [this Github
+repo](https://github.com/Rhodes-CS-Department/comp141-sp22) on server start.
 
 The deployment is configured to automatically update Rhodes-specific libraries
 when a user logs in, by running `pip install` on [this
@@ -206,16 +200,16 @@ hands!__ See [Known issues](#known-issues), particularly
 [#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
 __END WARNING__
 
-As of Fall'21, the container image for servers does not contain ssh, so if you
+~~As of Fall'21, the container image for servers does not contain ssh, so if you
 use 2fa with GitHub, you will need to [create an access
 token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
-in order to use https authentication.
+in order to use https authentication.~~ The current (12/30/21) image version contains ssh.
 
-Then, make sure you clone the repo to a separate directory than the
-`nbgitpuller` synced one (currently `comp141-fa21`):
+Then, __make sure you clone the repo to a separate directory__ than the
+`nbgitpuller` synced one (currently `comp141-sp22`):
 
 ```
-$ git clone https://github.com/Rhodes-CS-Department/comp141-fa21.git comp141-development
+$ git clone https://github.com/Rhodes-CS-Department/comp141-sp22.git comp141-development
 ```
 
 When making local changes to be reviewed/to shared resources, use a branch:
