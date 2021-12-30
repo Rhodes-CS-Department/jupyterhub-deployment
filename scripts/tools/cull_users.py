@@ -62,7 +62,7 @@ def main():
     parser.add_argument('--dry_run', type=bool, default=True,
                         help='Whether to actually perform update operations')
     parser.add_argument('--token', type=str,
-                        default='a85506cc6ec04ff588e306c5fd740557',
+                        default='',
                         help='API auth token')
     parser.add_argument('--api', type=str,
                         default='https://rhodes-notebook.org/hub/api',
