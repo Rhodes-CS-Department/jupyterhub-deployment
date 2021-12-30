@@ -237,8 +237,14 @@ $ git stash pop # unstash changes in new branch
 We use Rhodes-specific Python libraries for many assignments, which can be found
 in [this repo](https://github.com/Rhodes-CS-Department/comp141-libraries).
 
-These libraries are installed at every server startup, so any changes will be
-propagated to student servers and do not require a notebook environment restart.
+~~These libraries are installed at every server startup, so any changes will be
+propagated to student servers and do not require a notebook environment
+restart.~~
+
+In order to reduce startup time, these libraries are installed in the Docker
+image, rather than on server start. This means that changes to the 141 libraries
+require a rebuild of the Docker image and a version tag update followed by a
+helm upgrade.
 
 ## Additional libraries
 
@@ -369,6 +375,9 @@ for more info.
 `config/confg.yaml` contains the config for the JupyterHub instance. Any
 __configuration changes__ for the cluster should modify this file.
 
+Note that your helm version must be at least 3.2 in order to be compatible with
+the current JupyterHub helm chart.
+
 1. One time set up: Make Helm aware of the [JupyterHub Helm chart
    repo](https://jupyterhub.github.io/helm-chart/):
 
@@ -456,6 +465,9 @@ helpful to auto-reload them on changes:
 ```
 
 ### Manual building and pushing
+
+__Note:__ It is preferrable to use the scripts `scripts/` for building and
+pushing Docker images! Only do this if you know what you're doing.
 
 To build the image:
 
