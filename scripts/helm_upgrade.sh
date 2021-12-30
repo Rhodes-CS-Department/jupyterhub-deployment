@@ -7,6 +7,6 @@ helm upgrade --cleanup-on-fail \
   --install $RELEASE jupyterhub/jupyterhub \
   --namespace $NAMESPACE \
   --create-namespace \
-  --version=0.11.1 \
+  --version=1.2.0 \
   --values config/config.yaml \
   --set global.safeToShowValues=true
