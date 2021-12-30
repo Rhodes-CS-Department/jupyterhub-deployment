@@ -63,7 +63,7 @@ cull:
 
 hub:
   resources:
-		requests:
+    requests:
       cpu: 200m
       memory: 512Mi
   config:
@@ -114,7 +114,7 @@ prePuller:
         cpu: 0
         memory: 0
   continuous:
-    enabed: true
+    enabled: true
   resources:
     requests:
       cpu: 0
