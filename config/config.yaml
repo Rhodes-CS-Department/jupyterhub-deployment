@@ -10,6 +10,11 @@ proxy:
       - rhodes-py.org
     letsencrypt:
       contactEmail: langma@gmail.com
+  chp:
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
 
 singleuser:
   image:
@@ -18,7 +23,7 @@ singleuser:
     name: gcr.io/rhodes-cs/jserver
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2021_10_30rc01
+    tag: 2021_12_30rc00
   # user resource limits
   memory:
     limit: 1G
@@ -29,8 +34,15 @@ singleuser:
   storage:
     capacity: 1Gi
 
+  # default to pre-JupyterLab interface.
+  defaultUrl: /tree
+
   # sorry.
   extraEnv:
+    # default to old server app.
+    # TODO(langm): Update to jupyter_server.serverapp.ServerApp and use
+      # nbclassic to reskin the UI.
+    JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
     # sorry.
     EDITOR: "vim"
 
@@ -46,8 +58,8 @@ singleuser:
           [
             "sh",
             "-c", 
-            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-fa21 main comp141-fa21 --skip_rename --retry_merge \
-             || gitpuller https://github.com/Rhodes-CS-Department/comp141-fa21 main comp141-fa21 ; } 2>&1 | tee -a /tmp/startup_log",
+            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-sp22 main comp141-sp22 --skip_rename --retry_merge \
+             || gitpuller https://github.com/Rhodes-CS-Department/comp141-sp22 main comp141-sp22 ; } 2>&1 | tee -a /tmp/startup_log",
           ]
 
 cull:
@@ -57,6 +69,10 @@ cull:
   enabled: true
 
 hub:
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
   config:
     Authenticator:
       admin_users:
@@ -92,13 +108,24 @@ hub:
       username_key: email
     JupyterHub:
       authenticator_class: oauthenticator.generic.GenericOAuthenticator
+    # Delete a user's PVC when the user is deleted.
+    KubeSpawner:
+      delete_pvc: true
 
 # Ensure images are always available on nodes.
 prePuller:
   hook:
     enabled: true
+    resources:
+      requests:
+        cpu: 0
+        memory: 0
   continuous:
-    enabed: true
+    enabled: true
+  resources:
+    requests:
+      cpu: 0
+      memory: 0
 
 scheduling:
   podPriority:
@@ -121,3 +148,7 @@ scheduling:
   # least-loaded).
   userScheduler:
     enabled: true
+    resources:
+      requests:
+        cpu: 50m
+        memory: 256Mi
