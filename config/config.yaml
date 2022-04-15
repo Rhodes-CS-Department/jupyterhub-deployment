@@ -23,7 +23,7 @@ singleuser:
     name: gcr.io/rhodes-cs/jserver
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2021_12_30rc00
+    tag: 2022_04_14rc02
   # user resource limits
   memory:
     limit: 1G
