@@ -55,4 +55,4 @@ RUN pip install --no-cache-dir beautifulsoup4
 RUN pip install --no-cache-dir RISE
 
 # Install COMP141 libraries
-RUN pip install git+git://github.com/Rhodes-CS-Department/comp141-libraries.git
+RUN pip install --no-cache-dir git+https://github.com/Rhodes-CS-Department/comp141-libraries.git
