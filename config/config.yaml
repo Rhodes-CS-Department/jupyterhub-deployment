@@ -58,8 +58,8 @@ singleuser:
           [
             "sh",
             "-c", 
-            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-sp22 main comp141-sp22 --skip_rename --retry_merge \
-             || gitpuller https://github.com/Rhodes-CS-Department/comp141-sp22 main comp141-sp22 ; } 2>&1 | tee -a /tmp/startup_log",
+            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-su22 main comp141-su22 --skip_rename --retry_merge \
+             || gitpuller https://github.com/Rhodes-CS-Department/comp141-su22 main comp141-su22 ; } 2>&1 | tee -a /tmp/startup_log",
           ]
 
 cull:
