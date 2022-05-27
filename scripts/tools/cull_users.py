@@ -61,6 +61,7 @@ def cull_users(endpoint, token, threshold=None, dry_run=True, cull_admin=False):
     logging.info('Processing %d users...' % len(users))
 
     for user in users:
+        logging.debug(user)
         if user['admin'] and not cull_admin:
             logging.info('Skipping admin user %s' % user['name'])
             continue
@@ -89,8 +90,12 @@ def main():
                         help='API endpoint')
     parser.add_argument('--age', type=int, default=10,
                         help='Age in weeks to cull (0 = all users)')
+    parser.add_argument('--debug', action='store_true')
     args = vars(parser.parse_args())
-    logging.basicConfig(stream=sys.stdout, level=logging.INFO,
+    level = logging.INFO
+    if args['debug']:
+        level = logging.DEBUG
+    logging.basicConfig(stream=sys.stdout, level=level,
                         format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')
     logging.info(args)
     dry_run = not args['no_dry_run']
