@@ -1,8 +1,11 @@
 import argparse
+import datetime
 import logging
 import requests
 import sys
 import time
+
+from dateutil import parser
 
 
 def get_users(endpoint, token):
@@ -48,14 +51,28 @@ def cull_user(user, endpoint, token, dry_run=True):
         logging.info('OK')
 
 
-def cull_users(endpoint, token, dry_run=True, cull_admin=False):
+def cull_users(endpoint, token, threshold=None, dry_run=True, cull_admin=False):
+    since = None
+    if threshold:
+        since = datetime.datetime.now() - datetime.timedelta(weeks=threshold)
+        logging.info('Culling users idle since %s' % since)
+
     users = get_users(endpoint, token)
     logging.info('Processing %d users...' % len(users))
+
     for user in users:
         if user['admin'] and not cull_admin:
             logging.info('Skipping admin user %s' % user['name'])
             continue
+        last_active = datetime.datetime.min
+        if user['last_activity']:
+            last_active = parser.parse(user['last_activity'])
+        if since and last_active >= since.replace(tzinfo=last_active.tzinfo):
+            logging.info('Skipping active user %s (%s)' % (user['name'],
+                                                           last_active))
+            continue
         cull_user(user, endpoint, token, dry_run)
+
     logging.info('Done!')
 
 
@@ -66,9 +83,12 @@ def main():
     parser.add_argument('--token', type=str,
                         default='',
                         help='API auth token')
+    parser.add_argument('--token_file', type=str, default='.hub-token')
     parser.add_argument('--api', type=str,
                         default='https://rhodes-notebook.org/hub/api',
                         help='API endpoint')
+    parser.add_argument('--age', type=int, default=10,
+                        help='Age in weeks to cull (0 = all users)')
     args = vars(parser.parse_args())
     logging.basicConfig(stream=sys.stdout, level=logging.INFO,
                         format='[%(asctime)s] {%(filename)s:%(lineno)d} %(levelname)s - %(message)s')
@@ -79,7 +99,11 @@ def main():
         print('WARNING: Not a dry run. Ctrl-C to quit if you do not want to delete users')
         time.sleep(5)
 
-    cull_users(args['api'], args['token'], dry_run=dry_run)
+    token = args['token']
+    if not token and args['token_file']:
+        token = open(args['token_file']).readlines()[0].strip()
+
+    cull_users(args['api'], token, threshold=args['age'], dry_run=dry_run)
 
 
 if __name__ == '__main__':
