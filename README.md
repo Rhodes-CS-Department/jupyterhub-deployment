@@ -392,12 +392,19 @@ the current JupyterHub helm chart.
    helm repo update
    ```
 
+1. __Tokens:__ No secrets are stored in this repo; all tokens should be stored
+   elsewhere in a `values.yaml` file. The path to this file is a parameter to
+   `helm_upgrade.sh` (the next step).
+
 1. Now, to push changes to `config.yaml` to the cluster, run `helm upgrade`
    using the included script:
 
    ```
-   ./scripts/helm_upgrade.sh
+   ./scripts/helm_upgrade.sh -s=path/to/secrets.yaml -d
    ```
+
+   Note that the `-d` flag indicates tha this is a dry run and only the config
+   will be printed. To actually run the update, remove `-d`.
 
    This is the step that actually installs JupyterHub, so it might take a little
    bit.
