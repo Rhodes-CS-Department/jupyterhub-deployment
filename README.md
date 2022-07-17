@@ -10,8 +10,8 @@ Welcome to the Rhodes JupyterHub environment! This document contains:
 
 Here are some quick links, a full table of contents follows:
 
-* [Notebook environment](https://rhodes-py.org)
-* [Admin page](https://rhodes-py.org/hub/admin)
+* [Notebook environment](https://notebook.rhodes.edu)
+* [Admin page](https://notebook.rhodes.edu/hub/admin)
 * [Kubernetes
   cluster](https://console.cloud.google.com/kubernetes/list?project=rhodes-cs)
 * [CS Program GCP
@@ -712,7 +712,7 @@ published.
 ## Administering user servers
 
 The easiest way to administer user servers is via the
-[admin](https://rhodes-py.org/hub/admin) page. This allows you to log in to user
+[admin](https://notebook.rhodes.edu/hub/admin) page. This allows you to log in to user
 servers, kill and restart them, etc.
 
 Once you've logged in to a user server, you can run a terminal through the
