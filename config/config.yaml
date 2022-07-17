@@ -1,5 +1,5 @@
 proxy:
-  secretToken: "***REMOVED***"
+  # secretToken in secrets.yaml
   # Use static IP
   service:
     loadBalancerIP: 35.225.189.212
@@ -93,8 +93,7 @@ hub:
       - pkirlin@gmail.com
     GenericOAuthenticator:
       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
-      client_id: ***REMOVED***
-      client_secret: ***REMOVED***
+      # client_id and client_secret in secrets.yaml
       login_service: OneLogin
       oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
       scope:
