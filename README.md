@@ -261,7 +261,7 @@ We use [okpy](https://okpy.org) for student notebook submissions. Since okpy
 only supports Google for authentication, students need to log in to okpy with a
 Google account. In the past, we had students create Google accounts that
 corresponded to their Rhodes email (see
-[here](https://matthewlang.github.io/comp141/using_ok.html), for example) in
+[here](https://ml8.github.io/comp141/using_ok.html), for example) in
 order to access the environment. Since we have moved to OneLogin, students no
 longer do this. 
 
