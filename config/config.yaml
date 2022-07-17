@@ -1,5 +1,5 @@
 proxy:
-  secretToken: "fb1e7e8f4044ee770166331bf616ae7a7846e0b476fcc1d4774aad56a77a8d68"
+  # secretToken in secrets.yaml
   # Use static IP
   service:
     loadBalancerIP: 35.225.189.212
@@ -93,8 +93,7 @@ hub:
       - pkirlin@gmail.com
     GenericOAuthenticator:
       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
-      client_id: c0b3ff50-8b58-0139-1240-0a08f4c9941153544
-      client_secret: b5ebb63085a1318bca2a2815250d15ee82e4aea69f882a4e0e9d8ab27ff859a9
+      # client_id and client_secret in secrets.yaml
       login_service: OneLogin
       oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
       scope:
