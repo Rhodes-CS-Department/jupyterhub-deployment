@@ -45,16 +45,16 @@ Here are some quick links, a full table of contents follows:
   * [Configure your local environment for administration](#configure-your-local-environment-for-administration)
   * [Configuring JupyterHub](#configuring-jupyterhub)
   * [Customizing the Docker image](#customizing-the-docker-image)
-    * [Regular maintainence](#regular-maintainence)
-      * [Cleaning user profiles](#cleaning-user-profiles)
-      * [Updating between semesters](#updating-between-semesters)
-        * [Creating and syncing a new monorepo](#creating-and-syncing-a-new-monorepo)
-        * [Updating the Helm chart version](#updating-the-helm-chart-version)
-        * [Rebuilding the Docker image](#rebuilding-the-docker-image)
-        * [Push changes](#push-changes)
     * [Testing locally](#testing-locally)
     * [Manual building and pushing](#manual-building-and-pushing)
       * [Pushing the image to GCP](#pushing-the-image-to-gcp)
+* [Regular maintainence](#regular-maintainence)
+  * [Cleaning user profiles](#cleaning-user-profiles)
+  * [Updating between semesters](#updating-between-semesters)
+    * [Creating and syncing a new monorepo](#creating-and-syncing-a-new-monorepo)
+    * [Updating the Helm chart version](#updating-the-helm-chart-version)
+    * [Rebuilding the Docker image](#rebuilding-the-docker-image)
+    * [Push changes](#push-changes)
 * [Troubleshooting and Administration](#troubleshooting-and-administration)
   * [Viewing the cluster](#viewing-the-cluster)
     * [kubectl verbs](#kubectl-verbs)
@@ -454,70 +454,6 @@ continue the push.
 __Important:__ Don't forget to update `config.yaml` with the new version tag and
 run `helm_upgrade.sh` to push the config.
 
-### Regular maintainence
-
-#### Cleaning user profiles
-
-In the `scripts/tools/` directory there is a script for culling idle profiles.
-This can be used to delete users between semesters. Culling a user will also
-clean the PVC, which in turn will enable Kubernetes to reap their disk (so,
-removing a user eventually remove their storage).
-
-#### Updating between semesters
-
-The general outline for updating between semesters is the following:
-
-1. Create a new monorepo for course content.
-2. Update the JupyterHub config to pull the new monorepo on server start.
-3. Update the Helm chart to pickup any new release (optional).
-4. Rebuild the Docker image to pick up any library updates.
-5. Push your changes to deploy.
-
-[#44](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/pull/44)
-is an example of an update for a new semester.
-
-##### Creating and syncing a new monorepo
-
-The current method for delivering content is to have a monorepo that is synced
-upon server startup (see the [distributing
-files](#distributing-files-to-students) section for discussion of how this
-works). 
-
-For a new semester, we create a single monorepo for the semester (e.g., [summer
-'22](https://github.com/Rhodes-CS-Department/comp141-su22), [spring
-'22](https://github.com/Rhodes-CS-Department/comp141-sp22), etc.). The only
-config change required for this is to update `postStart` lifecycle hook in
-`config/config.yaml` to pull the new repo.
-
-##### Updating the Helm chart version
-
-The JupyerHub [Helm chart
-repository](https://jupyterhub.github.io/helm-chart/#jupyterhub) lists the
-stable and dev releases. To update the hub version, select a version, follow the
-instructions for [configuring your
-environment](#configure-your-local-environment-for-administration) to sync the
-chart repo and then update the `--version` flag in `scripts/helm_upgrade.sh`
-with the desired version.
-
-##### Rebuilding the Docker image
-
-Follow the instructions [here](#customizing-the-docker-image) to configure and
-push the Docker image.
-
-Note that this pulls in the latest release of `jupyter/scipy-notebook`, so
-performing this regularly keeps the actual Jupyter version up to date. It also
-pulls in any security updates for the underlying Ubuntu container. See the
-[Docker stacks
-documentation](https://jupyter-docker-stacks.readthedocs.io/en/latest/) for
-details on the Jupyter Docker images.
-
-Make sure to bump the version number in `config/config.yaml` to select the new
-image release.
-
-##### Push changes
-
-Run `scripts/helm_upgrade.sh` to deploy!
-
 ### Testing locally
 
 You can confirm that the image was updated with `docker image ls`.
@@ -587,6 +523,70 @@ fde1b612abad                         2021-02-14T18:06:17
 e05babc291c6                         2021-01-24T21:32:16
 6d4d44ff86d5                         2020-12-19T18:13:00
 ```
+
+# Regular maintainence
+
+## Cleaning user profiles
+
+In the `scripts/tools/` directory there is a script for culling idle profiles.
+This can be used to delete users between semesters. Culling a user will also
+clean the PVC, which in turn will enable Kubernetes to reap their disk (so,
+removing a user eventually remove their storage).
+
+## Updating between semesters
+
+The general outline for updating between semesters is the following:
+
+1. Create a new monorepo for course content.
+2. Update the JupyterHub config to pull the new monorepo on server start.
+3. Update the Helm chart to pickup any new release (optional).
+4. Rebuild the Docker image to pick up any library updates.
+5. Push your changes to deploy.
+
+[#44](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/pull/44)
+is an example of an update for a new semester.
+
+### Creating and syncing a new monorepo
+
+The current method for delivering content is to have a monorepo that is synced
+upon server startup (see the [distributing
+files](#distributing-files-to-students) section for discussion of how this
+works). 
+
+For a new semester, we create a single monorepo for the semester (e.g., [summer
+'22](https://github.com/Rhodes-CS-Department/comp141-su22), [spring
+'22](https://github.com/Rhodes-CS-Department/comp141-sp22), etc.). The only
+config change required for this is to update `postStart` lifecycle hook in
+`config/config.yaml` to pull the new repo.
+
+### Updating the Helm chart version
+
+The JupyerHub [Helm chart
+repository](https://jupyterhub.github.io/helm-chart/#jupyterhub) lists the
+stable and dev releases. To update the hub version, select a version, follow the
+instructions for [configuring your
+environment](#configure-your-local-environment-for-administration) to sync the
+chart repo and then update the `--version` flag in `scripts/helm_upgrade.sh`
+with the desired version.
+
+### Rebuilding the Docker image
+
+Follow the instructions [here](#customizing-the-docker-image) to configure and
+push the Docker image.
+
+Note that this pulls in the latest release of `jupyter/scipy-notebook`, so
+performing this regularly keeps the actual Jupyter version up to date. It also
+pulls in any security updates for the underlying Ubuntu container. See the
+[Docker stacks
+documentation](https://jupyter-docker-stacks.readthedocs.io/en/latest/) for
+details on the Jupyter Docker images.
+
+Make sure to bump the version number in `config/config.yaml` to select the new
+image release.
+
+### Push changes
+
+Run `scripts/helm_upgrade.sh` to deploy!
 
 # Troubleshooting and Administration
 
