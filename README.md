@@ -501,6 +501,13 @@ with the desired version.
 Follow the instructions [here](#customizing-the-docker-image) to configure and
 push the Docker image.
 
+Note that this pulls in the latest release of `jupyter/scipy-notebook`, so
+performing this regularly keeps the actual Jupyter version up to date. It also
+pulls in any security updates for the underlying Ubuntu container. See the
+[Docker stacks
+documentation](https://jupyter-docker-stacks.readthedocs.io/en/latest/) for
+details on the Jupyter Docker images.
+
 Make sure to bump the version number in `config/config.yaml` to select the new
 image release.
 
