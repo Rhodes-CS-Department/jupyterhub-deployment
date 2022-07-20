@@ -473,6 +473,9 @@ The general outline for updating between semesters is the following:
 4. Rebuild the Docker image to pick up any library updates.
 5. Push your changes to deploy.
 
+[#44](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/pull/44)
+is an example of an update for a new semester.
+
 ##### Creating and syncing a new monorepo
 
 The current method for delivering content is to have a monorepo that is synced
