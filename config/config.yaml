@@ -23,7 +23,7 @@ singleuser:
     name: gcr.io/rhodes-cs/jserver
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2022_04_14rc02
+    tag: 2022_07_20rc00
   # user resource limits
   memory:
     limit: 1G
@@ -58,8 +58,8 @@ singleuser:
           [
             "sh",
             "-c", 
-            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-su22 main comp141-su22 --skip_rename --retry_merge \
-             || gitpuller https://github.com/Rhodes-CS-Department/comp141-su22 main comp141-su22 ; } 2>&1 | tee -a /tmp/startup_log",
+            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-fa22 main comp141-fa22 --skip_rename --retry_merge \
+             || gitpuller https://github.com/Rhodes-CS-Department/comp141-fa22 main comp141-fa22 ; } 2>&1 | tee -a /tmp/startup_log",
           ]
 
 cull:
@@ -77,8 +77,6 @@ hub:
     Authenticator:
       admin_users:
       - superdockm@rhodes.edu  
-      - parch-22@rhodes.edu
-      - abuwa-23@rhodes.edu
       - trenthem@rhodes.edu
       - walkerd@rhodes.edu
       - kirlinp@rhodes.edu

@@ -10,8 +10,8 @@ Welcome to the Rhodes JupyterHub environment! This document contains:
 
 Here are some quick links, a full table of contents follows:
 
-* [Notebook environment](https://rhodes-py.org)
-* [Admin page](https://rhodes-py.org/hub/admin)
+* [Notebook environment](https://notebook.rhodes.edu)
+* [Admin page](https://notebook.rhodes.edu/hub/admin)
 * [Kubernetes
   cluster](https://console.cloud.google.com/kubernetes/list?project=rhodes-cs)
 * [CS Program GCP
@@ -26,46 +26,55 @@ Here are some quick links, a full table of contents follows:
 # Table of Contents
 (Created by [gh-md-toc](https://github.com/ekalinin/github-markdown-toc.go))
 
+
+* [Rhodes Jupyter Environment](#rhodes-jupyter-environment)
+* [Table of Contents](#table-of-contents)
 * [Cluster Architecture and Deployment](#cluster-architecture-and-deployment)
 * [Teaching in the environment](#teaching-in-the-environment)
-   * [Logins](#logins)
-   * [Starting/restarting your server](#startingrestarting-your-server)
-   * [Accessing student servers](#accessing-student-servers)
-   * [Distributing Files to Students](#distributing-files-to-students)
-      * [Working with GitHub and nbgitpuller](#working-with-github-and-nbgitpuller)
-   * [COMP141 libraries](#comp141-libraries)
-   * [Additional libraries](#additional-libraries)
-   * [Integrating with okpy](#integrating-with-okpy)
-   * [Using multiple okpy endpoints](#using-multiple-okpy-endpoints)
-   * [Tips for authoring assignments](#tips-for-authoring-assignments)
+  * [Logins](#logins)
+  * [Starting/restarting your server](#startingrestarting-your-server)
+  * [Accessing student servers](#accessing-student-servers)
+  * [Distributing Files to Students](#distributing-files-to-students)
+    * [Working with GitHub and nbgitpuller](#working-with-github-and-nbgitpuller)
+  * [COMP141 libraries](#comp141-libraries)
+  * [Additional libraries](#additional-libraries)
+  * [Integrating with okpy](#integrating-with-okpy)
+  * [Using multiple okpy endpoints](#using-multiple-okpy-endpoints)
+  * [Tips for authoring assignments](#tips-for-authoring-assignments)
 * [Configuring the environment](#configuring-the-environment)
-   * [Configure your local environment for administration](#configure-your-local-environment-for-administration)
-   * [Configuring JupyterHub](#configuring-jupyterhub)
-   * [Customizing the Docker image](#customizing-the-docker-image)
-      * [Testing locally](#testing-locally)
-      * [Manual building and pushing](#manual-building-and-pushing)
-         * [Pushing the image to GCP](#pushing-the-image-to-gcp)
+  * [Configure your local environment for administration](#configure-your-local-environment-for-administration)
+  * [Configuring JupyterHub](#configuring-jupyterhub)
+  * [Customizing the Docker image](#customizing-the-docker-image)
+    * [Regular maintainence](#regular-maintainence)
+      * [Cleaning user profiles](#cleaning-user-profiles)
+      * [Updating between semesters](#updating-between-semesters)
+        * [Creating and syncing a new monorepo](#creating-and-syncing-a-new-monorepo)
+        * [Updating the Helm chart version](#updating-the-helm-chart-version)
+        * [Rebuilding the Docker image](#rebuilding-the-docker-image)
+        * [Push changes](#push-changes)
+    * [Testing locally](#testing-locally)
+    * [Manual building and pushing](#manual-building-and-pushing)
+      * [Pushing the image to GCP](#pushing-the-image-to-gcp)
 * [Troubleshooting and Administration](#troubleshooting-and-administration)
-   * [Viewing the cluster](#viewing-the-cluster)
-      * [kubectl verbs](#kubectl-verbs)
-      * [Expected/example state](#expectedexample-state)
-         * [Service](#service)
-         * [Deployment](#deployment)
-         * [Pods](#pods)
-         * [Disk and claims](#disk-and-claims)
-   * [Viewing logs](#viewing-logs)
-   * [Administering user servers](#administering-user-servers)
-   * [Accessing user files without a server](#accessing-user-files-without-a-server)
-   * [Restarting deployments (not user servers)](#restarting-deployments-not-user-servers)
-   * [Manually scaling](#manually-scaling)
-   * [Installing and running the dashboard](#installing-and-running-the-dashboard)
-   * [Culling users](#culling-users)
-   * [Help docs](#help-docs)
+  * [Viewing the cluster](#viewing-the-cluster)
+    * [kubectl verbs](#kubectl-verbs)
+    * [Expected/example state](#expectedexample-state)
+      * [Service](#service)
+      * [Deployment](#deployment)
+      * [Pods](#pods)
+      * [Disk and claims](#disk-and-claims)
+  * [Viewing logs](#viewing-logs)
+  * [Administering user servers](#administering-user-servers)
+  * [Accessing user files without a server](#accessing-user-files-without-a-server)
+  * [Restarting deployments (not user servers)](#restarting-deployments-not-user-servers)
+  * [Manually scaling](#manually-scaling)
+  * [Installing and running the dashboard](#installing-and-running-the-dashboard)
+  * [Culling users](#culling-users)
+  * [Help docs](#help-docs)
 * [Initial Cluster Setup](#initial-cluster-setup)
-   * [GCE project configuration](#gce-project-configuration)
-   * [Create Kubernetes cluster](#create-kubernetes-cluster)
+  * [GCE project configuration](#gce-project-configuration)
+  * [Create Kubernetes cluster](#create-kubernetes-cluster)
 * [Known issues](#known-issues)
-
 
 # Cluster Architecture and Deployment
 
@@ -261,7 +270,7 @@ We use [okpy](https://okpy.org) for student notebook submissions. Since okpy
 only supports Google for authentication, students need to log in to okpy with a
 Google account. In the past, we had students create Google accounts that
 corresponded to their Rhodes email (see
-[here](https://matthewlang.github.io/comp141/using_ok.html), for example) in
+[here](https://ml8.github.io/comp141/using_ok.html), for example) in
 order to access the environment. Since we have moved to OneLogin, students no
 longer do this. 
 
@@ -444,6 +453,67 @@ continue the push.
 
 __Important:__ Don't forget to update `config.yaml` with the new version tag and
 run `helm_upgrade.sh` to push the config.
+
+### Regular maintainence
+
+#### Cleaning user profiles
+
+In the `scripts/tools/` directory there is a script for culling idle profiles.
+This can be used to delete users between semesters. Culling a user will also
+clean the PVC, which in turn will enable Kubernetes to reap their disk (so,
+removing a user eventually remove their storage).
+
+#### Updating between semesters
+
+The general outline for updating between semesters is the following:
+
+1. Create a new monorepo for course content.
+2. Update the JupyterHub config to pull the new monorepo on server start.
+3. Update the Helm chart to pickup any new release (optional).
+4. Rebuild the Docker image to pick up any library updates.
+5. Push your changes to deploy.
+
+##### Creating and syncing a new monorepo
+
+The current method for delivering content is to have a monorepo that is synced
+upon server startup (see the [distributing
+files](#distributing-files-to-students) section for discussion of how this
+works). 
+
+For a new semester, we create a single monorepo for the semester (e.g., [summer
+'22](https://github.com/Rhodes-CS-Department/comp141-su22), [spring
+'22](https://github.com/Rhodes-CS-Department/comp141-sp22), etc.). The only
+config change required for this is to update `postStart` lifecycle hook in
+`config/config.yaml` to pull the new repo.
+
+##### Updating the Helm chart version
+
+The JupyerHub [Helm chart
+repository](https://jupyterhub.github.io/helm-chart/#jupyterhub) lists the
+stable and dev releases. To update the hub version, select a version, follow the
+instructions for [configuring your
+environment](#configure-your-local-environment-for-administration) to sync the
+chart repo and then update the `--version` flag in `scripts/helm_upgrade.sh`
+with the desired version.
+
+##### Rebuilding the Docker image
+
+Follow the instructions [here](#customizing-the-docker-image) to configure and
+push the Docker image.
+
+Note that this pulls in the latest release of `jupyter/scipy-notebook`, so
+performing this regularly keeps the actual Jupyter version up to date. It also
+pulls in any security updates for the underlying Ubuntu container. See the
+[Docker stacks
+documentation](https://jupyter-docker-stacks.readthedocs.io/en/latest/) for
+details on the Jupyter Docker images.
+
+Make sure to bump the version number in `config/config.yaml` to select the new
+image release.
+
+##### Push changes
+
+Run `scripts/helm_upgrade.sh` to deploy!
 
 ### Testing locally
 
@@ -712,7 +782,7 @@ published.
 ## Administering user servers
 
 The easiest way to administer user servers is via the
-[admin](https://rhodes-py.org/hub/admin) page. This allows you to log in to user
+[admin](https://notebook.rhodes.edu/hub/admin) page. This allows you to log in to user
 servers, kill and restart them, etc.
 
 Once you've logged in to a user server, you can run a terminal through the
