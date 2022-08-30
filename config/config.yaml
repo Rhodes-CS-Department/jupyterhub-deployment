@@ -89,6 +89,7 @@ hub:
       - catie.welsh@gmail.com
       - betswms@gmail.com
       - pkirlin@gmail.com
+      - cowanj@rhodes.edu
     GenericOAuthenticator:
       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
       # client_id and client_secret in secrets.yaml
