@@ -23,7 +23,7 @@ singleuser:
     name: gcr.io/rhodes-cs/jserver
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2022_07_20rc00
+    tag: 2023_01_06rc00
   # user resource limits
   memory:
     limit: 1G
@@ -35,13 +35,12 @@ singleuser:
     capacity: 1Gi
 
   # default to pre-JupyterLab interface.
+  # TODO(langm): Update to jupyter_server.serverapp.ServerApp and use
+  #              nbclassic to reskin the UI. See documentation:
+  #              https://z2jh.jupyter.org/en/stable/jupyterhub/customizing/user-environment.html#use-classic-notebook-by-default
   defaultUrl: /tree
-
-  # sorry.
   extraEnv:
     # default to old server app.
-    # TODO(langm): Update to jupyter_server.serverapp.ServerApp and use
-      # nbclassic to reskin the UI.
     JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
     # sorry.
     EDITOR: "vim"
@@ -142,8 +141,7 @@ scheduling:
   userPods:
     nodeAffinity:
       matchNodePurpose: require
-  # Minimize resource usage by bin packing (as opposed to
-  # least-loaded).
+  # Minimize resource usage by bin packing (as opposed to least-loaded).
   userScheduler:
     enabled: true
     resources:
