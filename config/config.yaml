@@ -23,7 +23,7 @@ singleuser:
     name: gcr.io/rhodes-cs/jserver
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2023_01_28rc00
+    tag: 2023_01_28rc04
   # user resource limits
   memory:
     limit: 1G
@@ -38,7 +38,7 @@ singleuser:
   # TODO(langm): Update to jupyter_server.serverapp.ServerApp and use
   #              nbclassic to reskin the UI. See documentation:
   #              https://z2jh.jupyter.org/en/stable/jupyterhub/customizing/user-environment.html#use-classic-notebook-by-default
-  defaultUrl: /tree
+  defaultUrl: /tree/
   extraEnv:
     # default to old server app.
     JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"

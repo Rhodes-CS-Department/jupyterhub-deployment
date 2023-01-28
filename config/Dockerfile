@@ -13,6 +13,9 @@ RUN ln -s /usr/bin/vim.tiny /usr/local/bin/vim
 # De-escalate
 USER $NB_UID
 
+# Install classic notebook
+RUN pip install --no-cache-dir nbclassic
+
 # Required libraries for 141
 
 # Required for cs1-libraries
@@ -60,5 +63,5 @@ RUN pip install --no-cache-dir git+https://github.com/Rhodes-CS-Department/comp1
 # Install theme selector
 RUN git clone https://github.com/Rhodes-CS-Department/jupyter_themes.git
 RUN jupyter nbextension install jupyter_themes/ --sys-prefix
-RUN jupyter nbextension enable jupyter_themes/theme_selector --section='common'
+RUN jupyter nbextension enable jupyter_themes/theme_selector --section='common' --sys-prefix
 RUN rm -rf jupyter_themes
