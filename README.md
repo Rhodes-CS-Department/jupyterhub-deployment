@@ -123,16 +123,19 @@ The JupyterHub deployment is configured in two ways:
   container to run, how many resources should be provided to a server, how
   authentication works, etc.
 
-* __The Docker container image__ that runs both user servers. The Jupyter
-  project maintains a [set of container
-  images](https://github.com/jupyter/docker-stacks/). However, we want to
-  install some non-default libraries, so we have a custom container image for
-  our deployment. This is configured in `config/Dockerfile` and is hosted in the
-  GCP project
-  [here](https://console.cloud.google.com/gcr/images/rhodes-cs?project=rhodes-cs).
+* __The Docker container images__ that run user servers. The Jupyter project
+  maintains a [set of container
+  images](https://github.com/jupyter/docker-stacks/). We layer some libraries on
+  top of the Jupyter
+  [scipy](https://github.com/jupyter/docker-stacks/tree/main/scipy-notebook)
+  stack for COMP141 and therefore have a custom container image for COMP141.
+  This is configured in `config/Dockerfile.comp141` and is hosted in the GCP
+  project
+  [here](https://console.cloud.google.com/gcr/images/rhodes-cs?project=rhodes-cs)
+  with the name `gcr.io/rhodes-cs/jserver`.
 
   In this guide, there are instructions for configuring, building, and pushing
-  this container image.
+  custom container images.
 
 Authentication is done via OneLogin. We have integrated with the Rhodes OneLogin
 production instance so that students and faculty can log in using their Rhodes
@@ -427,13 +430,14 @@ the current JupyterHub helm chart.
 As you can see in `config/config.yaml` under the `singleuser` node, we use a
 custom Docker container with tools installed that we want.
 
-The Docker container used for user servers is defined in `config/Dockerfile`.
-Any changes to the user's image must be made by editing this file.
+The Docker container used for COMP141 user servers is defined in
+`config/Dockerfile.comp141`.  Any changes to the user's image must be made by
+editing this file.
 
 Make sure that you have [installed
 Docker](https://hub.docker.com/editions/community/).
 
-In `config/Dockerfile`, make the desired changes.
+In `config/Dockerfile.comp141`, make the desired changes.
 
 Then, when you want to build and push the image, run:
 
@@ -487,7 +491,7 @@ pushing Docker images! Only do this if you know what you're doing.
 
 To build the image:
 
-`docker build -t jserver -f config/Dockerfile config/`
+`docker build -t jserver -f config/Dockerfile.comp141 config/`
 
 #### Pushing the image to GCP
 

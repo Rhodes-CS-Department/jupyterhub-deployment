@@ -1,0 +1,16 @@
+image="$1"
+
+dockerfile=""
+image_name=""
+
+if [ -f "config/Dockerfile.$image" ]; then
+  dockerfile="confg/Dockerfile.$image"
+  image_name="nb_server_$image"
+  printf "[%s] Using %s for image %s...\n" $image $dockerfile $image_name
+else
+  printf "Must supply a valid image name!\n"
+  printf "Options:\n"
+  printf "\t%s\n" $(ls config/Dockerfile.* | cut -f 2 -d '.')
+  exit
+fi
+
