@@ -24,6 +24,25 @@ singleuser:
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
     tag: 2023_01_28rc04
+  # TODO: support different images
+  # e.g.,
+  # profileList:
+  #   - display_name: "COMP141"
+  #     description: "Notebook environment for COMP141"
+  #     default: true
+  #     # TODO: move nbgitpuller sync here 
+  #   - display_name: "Machine Learning/Tensorflow"
+  #     description: "Notebook environment with Tensorflow"
+  #     kubespawner_override:
+  #       image: jupyter/tensorflow-notebook
+  #       cpu_guarantee: 1
+  #       cpu_limit: 2
+  #       mem_guarantee: 2G
+  #       mem_limit: 6G
+  #   - display_name: "R (Statistics)"
+  #     description: "R notebooks for stats courses"
+  #     kubespawner_override:
+  #       image: jupyter/r-notebook
   # user resource limits
   memory:
     limit: 1G
@@ -32,8 +51,7 @@ singleuser:
     limit: 0.5
     guarantee: 0.1
   storage:
-    capacity: 1Gi
-
+    capacity: 5Gi
   # default to pre-JupyterLab interface.
   # TODO(langm): Update to jupyter_server.serverapp.ServerApp and use
   #              nbclassic to reskin the UI. See documentation:
@@ -44,7 +62,6 @@ singleuser:
     JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
     # sorry.
     EDITOR: "vim"
-
   # Synchronize the libraries repository.
   lifecycleHooks:
     postStart:
