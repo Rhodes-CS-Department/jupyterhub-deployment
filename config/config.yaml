@@ -20,10 +20,10 @@ singleuser:
   image:
     # Docker container used for spawning user servers.
     # Configured for Rhodes with required libraries installed.
-    name: gcr.io/rhodes-cs/jserver
+    name: gcr.io/rhodes-cs/nb_server_comp141
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2023_01_28rc04
+    tag: 2023_05_23rc00
   # TODO: support different images
   # e.g.,
   # profileList:
@@ -74,8 +74,8 @@ singleuser:
           [
             "sh",
             "-c", 
-            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-sp23 main comp141-sp23 --skip_rename --retry_merge \
-             || gitpuller https://github.com/Rhodes-CS-Department/comp141-sp23 main comp141-sp23 ; } 2>&1 | tee -a /tmp/startup_log",
+            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-fa23 main comp141-fa23 --skip_rename --retry_merge \
+             || gitpuller https://github.com/Rhodes-CS-Department/comp141-fa23 main comp141-fa23 ; } 2>&1 | tee -a /tmp/startup_log",
           ]
 
 cull:

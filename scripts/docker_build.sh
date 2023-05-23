@@ -3,8 +3,8 @@
 path=${0%/*}
 . $path/select.incl
 
-printf "Building Docker image...\n"
-docker build $@ -t $image_name -f $dockerfile config/
+printf "Building Docker image %s...\n" $image_name
+docker build -t $image_name -f $dockerfile config/
 
 if [ $? -ne 0 ]; then
   printf "Build failed!\n"
