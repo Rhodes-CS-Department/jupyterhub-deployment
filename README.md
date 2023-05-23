@@ -929,7 +929,7 @@ namespace drop down to view the JupyterHub telemetry.
 
 ## Culling users
 
-There is Python code to remove users (and PVCs) under `scripts/tools`.
+There is Python code to remove users (and PVCs) under `scripts/tools/cull_users`.
 
 To run, you will need to grant yourself an OAuth token to use for the script to
 take action on your behalf. From the [token
