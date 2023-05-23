@@ -132,7 +132,7 @@ The JupyterHub deployment is configured in two ways:
   This is configured in `config/Dockerfile.comp141` and is hosted in the GCP
   project
   [here](https://console.cloud.google.com/gcr/images/rhodes-cs?project=rhodes-cs)
-  with the name `gcr.io/rhodes-cs/jserver`.
+  with the name `gcr.io/rhodes-cs/nb_server_comp141`.
 
   In this guide, there are instructions for configuring, building, and pushing
   custom container images.
@@ -374,7 +374,8 @@ for more info.
    tool. You can read the explanation
    [here](https://cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl).
 1. Give your account permissions to perform all admin actions necessary by
-   running `./scripts/cluster_permissions.sh your-google-account`
+   running `./scripts/cluster_permissions.sh your-google-account` (__one
+   time__).
 1. Install [Docker](https://hub.docker.com/editions/community/).
 1. Run `gcloud auth configure-docker` in order to be able to push to `gcr.io`.
 1. Install [Helm](https://helm.sh) following the instruction
@@ -442,7 +443,7 @@ In `config/Dockerfile.comp141`, make the desired changes.
 Then, when you want to build and push the image, run:
 
 ```
-./scripts/docker_build.sh
+./scripts/docker_build.sh comp141
 ```
 
 This script will do the Docker build and prompt whether you want to push the
@@ -452,7 +453,7 @@ If you choose to test locally and push later, you can run the following to
 continue the push.
 
 ```
-./scripts/docker_push.sh
+./scripts/docker_push.sh comp141
 ```
 
 __Important:__ Don't forget to update `config.yaml` with the new version tag and
@@ -467,14 +468,14 @@ following (the `-p` flag forwards the container's port 8888 to the local port
 8888):
 
 ```
-docker run -p 8888:8888 jserver
+docker run -p 8888:8888 nb_server_comp141
 ```
 
 If you want to do development of course materials or libraries that are stored
 locally, you can mount your local filesystem to the user home directory on the
 locally-running container image with the following.
 
-`docker run -p 8888:8888 -v /path/to/dir/to/mount:/home/jovyan/work jserver`
+`docker run -p 8888:8888 -v /path/to/dir/to/mount:/home/jovyan/work nb_server_comp141`
 
 If you are developing libraries and experimenting with them in a notebook, it is
 helpful to auto-reload them on changes:
@@ -491,7 +492,7 @@ pushing Docker images! Only do this if you know what you're doing.
 
 To build the image:
 
-`docker build -t jserver -f config/Dockerfile.comp141 config/`
+`docker build -t nb_server_comp141 -f config/Dockerfile.comp141 config/`
 
 #### Pushing the image to GCP
 
@@ -510,23 +511,36 @@ of the form `YYYY_MM_DDrcVV` where `VV` is used for multiple versions per day
 
 ```
 export RC_VERSION=YYYY_MM_DDrcVV
-docker tag jserver:latest gcr.io/rhodes-cs/jserver:$RC_VERSION
+docker tag nb_server_comp141:latest gcr.io/rhodes-cs/nb_server_comp141:$RC_VERSION
 docker image ls
-docker push gcr.io/rhodes-cs/jserver:$RC_VERSION
+docker push gcr.io/rhodes-cs/nb_server_comp141:$RC_VERSION
 ```
 
 Now you should see the container when you run `gcloud container images list`.
 Additionally, you should see the the new release candidate tag when you run
-`gcloud container images list-tags gcr.io/rhodes-cs/jserver`:
+`gcloud container images list-tags gcr.io/rhodes-cs/nb_server_comp141`:
 
 ```
-gcloud container images list-tags gcr.io/rhodes-cs/jserver
+gcloud container images list-tags gcr.io/rhodes-cs/nb_server_comp141
 DIGEST        TAGS                   TIMESTAMP
 48d50b385e28  2020_02_16rc01,latest  2021-02-16T15:54:46
 fde1b612abad                         2021-02-14T18:06:17
 e05babc291c6                         2021-01-24T21:32:16
 6d4d44ff86d5                         2020-12-19T18:13:00
 ```
+
+# Creating and using other images
+
+If you would like to create additional images for students to use (e.g., for
+different courses, create a new Dockerfile in `config/` with the appropriate
+suffix.
+
+Then, follow the same procedure for building/deploying
+[above](#customizing-the-docker-image), but use the new suffix.
+
+The first time this is done, you will have to follow the __TODO__ in
+`config.yaml` using the instructions
+[here](https://z2jh.jupyter.org/en/stable/jupyterhub/customizing/user-environment.html#using-multiple-profiles-to-let-users-select-their-environment).
 
 # Regular maintainence
 
@@ -590,7 +604,7 @@ image release.
 
 ### Push changes
 
-Run `scripts/helm_upgrade.sh` to deploy!
+Run `scripts/helm_upgrade.sh -s=PATH_TO_SECRETS.yaml` to deploy!
 
 # Troubleshooting and Administration
 

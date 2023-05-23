@@ -4,7 +4,7 @@ dockerfile=""
 image_name=""
 
 if [ -f "config/Dockerfile.$image" ]; then
-  dockerfile="confg/Dockerfile.$image"
+  dockerfile="config/Dockerfile.$image"
   image_name="nb_server_$image"
   printf "[%s] Using %s for image %s...\n" $image $dockerfile $image_name
 else
