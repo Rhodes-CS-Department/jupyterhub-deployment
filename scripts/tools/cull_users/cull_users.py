@@ -34,7 +34,7 @@ def cull_user(user, endpoint, token, dry_run=True):
                 logging.error(
                     'Could not delete server for user %s with code %d' % (name,
                                                                           r.status_code))
-                return
+                return 0
             logging.info('OK')
 
     # Delete user.
@@ -47,8 +47,9 @@ def cull_user(user, endpoint, token, dry_run=True):
         if r.status_code != 204:
             logging.error('Could not delete user %s with code %d' % (name,
                                                                      r.status_code))
-            return
+            return 0
         logging.info('OK')
+    return 1
 
 
 def cull_users(endpoint, token, threshold=None, dry_run=True, cull_admin=False):
@@ -59,6 +60,9 @@ def cull_users(endpoint, token, threshold=None, dry_run=True, cull_admin=False):
 
     users = get_users(endpoint, token)
     logging.info('Processing %d users...' % len(users))
+
+    culled = 0
+    cullable = 0
 
     for user in users:
         logging.debug(user)
@@ -72,9 +76,12 @@ def cull_users(endpoint, token, threshold=None, dry_run=True, cull_admin=False):
             logging.info('Skipping active user %s (%s)' % (user['name'],
                                                            last_active))
             continue
-        cull_user(user, endpoint, token, dry_run)
+        cullable += 1
+        culled += cull_user(user, endpoint, token, dry_run)
 
     logging.info('Done!')
+    logging.info('Total users: %d Culled: %d Errors: %d\n', len(users),
+                 culled, cullable-culled)
 
 
 def main():
