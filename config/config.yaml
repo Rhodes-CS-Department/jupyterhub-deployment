@@ -7,7 +7,6 @@ proxy:
     enabled: true
     hosts:
       - rhodes-notebook.org
-      - rhodes-py.org
     letsencrypt:
       contactEmail: superdockm@rhodes.edu
   chp:
