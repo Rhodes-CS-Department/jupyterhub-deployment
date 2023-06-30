@@ -9,7 +9,7 @@ proxy:
       - rhodes-notebook.org
       - rhodes-py.org
     letsencrypt:
-      contactEmail: langma@gmail.com
+      contactEmail: superdockm@rhodes.edu
   chp:
     resources:
       requests:
@@ -96,12 +96,10 @@ hub:
       - trenthem@rhodes.edu
       - walkerd@rhodes.edu
       - kirlinp@rhodes.edu
-      - langm@rhodes.edu
       - larkinsb@rhodes.edu
       - sandersb@rhodes.edu
       - sowellr@rhodes.edu
       - welshc@rhodes.edu
-      - langma@gmail.com
       - catie.welsh@gmail.com
       - betswms@gmail.com
       - pkirlin@gmail.com
