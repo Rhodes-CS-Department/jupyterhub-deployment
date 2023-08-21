@@ -178,8 +178,8 @@ visible to the student.
 
 ## Distributing Files to Students
 
-__For Spring '22:__ All users automatically sync [this Github
-repo](https://github.com/Rhodes-CS-Department/comp141-sp22) on server start.
+__For Fall '23:__ All users automatically sync [this Github
+repo](https://github.com/Rhodes-CS-Department/comp141-fa23) on server start.
 
 The deployment is configured to automatically update Rhodes-specific libraries
 when a user logs in, by running `pip install` on [this
@@ -212,11 +212,6 @@ hands!__ See [Known issues](#known-issues), particularly
 [#5](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/issues/5).
 __END WARNING__
 
-~~As of Fall'21, the container image for servers does not contain ssh, so if you
-use 2fa with GitHub, you will need to [create an access
-token](https://docs.github.com/en/github/authenticating-to-github/creating-a-personal-access-token)
-in order to use https authentication.~~ The current (12/30/21) image version contains ssh.
-
 Then, __make sure you clone the repo to a separate directory__ than the
 `nbgitpuller` synced one (currently `comp141-sp22`):
 
@@ -248,10 +243,6 @@ $ git stash pop # unstash changes in new branch
 
 We use Rhodes-specific Python libraries for many assignments, which can be found
 in [this repo](https://github.com/Rhodes-CS-Department/comp141-libraries).
-
-~~These libraries are installed at every server startup, so any changes will be
-propagated to student servers and do not require a notebook environment
-restart.~~
 
 In order to reduce startup time, these libraries are installed in the Docker
 image, rather than on server start. This means that changes to the 141 libraries
