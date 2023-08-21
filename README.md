@@ -213,10 +213,10 @@ hands!__ See [Known issues](#known-issues), particularly
 __END WARNING__
 
 Then, __make sure you clone the repo to a separate directory__ than the
-`nbgitpuller` synced one (currently `comp141-sp22`):
+`nbgitpuller` synced one (currently `comp141-fa23`):
 
 ```
-$ git clone https://github.com/Rhodes-CS-Department/comp141-sp22.git comp141-development
+$ git clone https://github.com/Rhodes-CS-Department/comp141-fa23.git comp141-development
 ```
 
 When making local changes to be reviewed/to shared resources, use a branch:
