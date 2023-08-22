@@ -13,15 +13,16 @@ RUN ln -s /usr/bin/vim.tiny /usr/local/bin/vim
 # De-escalate
 USER $NB_UID
 
-# Install classic notebook
-RUN pip install --no-cache-dir nbclassic
+# Install pre-v.7 Jupyter notebook.
+# This is necessary for jupyter_contrib_nbextensions to work.
+RUN pip install --no-cache-dir notebook==6.5.5
 
 # Required libraries for 141
 
 # Required for cs1-libraries
 RUN pip install --no-cache-dir ipycanvas
 RUN pip install --no-cache-dir ipyevents
-RUN pip install --no-cache-dir jupyter-ui-poll 
+RUN pip install --no-cache-dir jupyter-ui-poll
 
 # Note: we use a forked version of nbgitpuller to loosen some semantics when
 # merging. This forked version has additional flags that control some behavior
