@@ -108,6 +108,7 @@ hub:
     GenericOAuthenticator:
       allow_all: true
       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
+      basic_auth: true
       # client_id and client_secret in secrets.yaml
       login_service: OneLogin
       oauth_callback_url: https://rhodes-notebook.org/hub/oauth_callback
