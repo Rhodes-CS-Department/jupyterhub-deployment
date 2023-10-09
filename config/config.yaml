@@ -107,7 +107,6 @@ hub:
       - cowanj@rhodes.edu
     GenericOAuthenticator:
       allow_all: true
-      allow_existing_users: true
       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
       # client_id and client_secret in secrets.yaml
       login_service: OneLogin
