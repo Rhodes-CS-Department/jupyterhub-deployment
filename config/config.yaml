@@ -119,7 +119,7 @@ hub:
       userdata_url: https://rhodes.onelogin.com/oidc/2/me
       username_claim: email
     JupyterHub:
-      authenticator_class: oauthenticator.generic.GenericOAuthenticator
+      authenticator_class: generic-oauth
     # Delete a user's PVC when the user is deleted.
     KubeSpawner:
       delete_pvc: true
