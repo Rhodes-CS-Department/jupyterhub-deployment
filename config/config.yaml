@@ -106,6 +106,7 @@ hub:
       - pkirlin@gmail.com
       - cowanj@rhodes.edu
     GenericOAuthenticator:
+      allow_all: true
       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
       # client_id and client_secret in secrets.yaml
       login_service: OneLogin
