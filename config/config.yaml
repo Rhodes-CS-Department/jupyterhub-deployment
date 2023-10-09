@@ -112,11 +112,10 @@ hub:
       - openid
       - profile
       token_url: https://rhodes.onelogin.com/oidc/2/token
-      userdata_method: GET
       userdata_params:
         state: state
       userdata_url: https://rhodes.onelogin.com/oidc/2/me
-      username_key: email
+      username_claim: email
     JupyterHub:
       authenticator_class: oauthenticator.generic.GenericOAuthenticator
     # Delete a user's PVC when the user is deleted.
