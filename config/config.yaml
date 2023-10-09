@@ -51,6 +51,8 @@ singleuser:
     guarantee: 0.1
   storage:
     capacity: 5Gi
+    dynamic:
+      storageClass: standard-rwo
   # default to pre-JupyterLab interface.
   # TODO(langm): Update to jupyter_server.serverapp.ServerApp and use
   #              nbclassic to reskin the UI. See documentation:
