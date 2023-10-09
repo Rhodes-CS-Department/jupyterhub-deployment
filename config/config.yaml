@@ -52,7 +52,7 @@ singleuser:
   storage:
     capacity: 5Gi
     dynamic:
-      storageClass: standard-rwo
+      storageClass: jupyterhub-user-pd
   # default to pre-JupyterLab interface.
   # TODO(langm): Update to jupyter_server.serverapp.ServerApp and use
   #              nbclassic to reskin the UI. See documentation:
