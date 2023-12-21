@@ -35,7 +35,7 @@ helm upgrade --cleanup-on-fail \
   --install $RELEASE jupyterhub/jupyterhub \
   --namespace $NAMESPACE \
   --create-namespace \
-  --version=3.1.0 \
+  --version=3.2.1 \
   $dry_run \
   --values $secrets \
   --values config/config.yaml 
