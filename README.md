@@ -551,6 +551,7 @@ The general outline for updating between semesters is the following:
 3. Update the Helm chart to pickup any new release (optional).
 4. Rebuild the Docker image to pick up any library updates.
 5. Push your changes to deploy.
+6. Update the public `options.json` file.
 
 [#44](https://github.com/Rhodes-CS-Department/jupyterhub-deployment/pull/44)
 is an example of an update for a new semester.
@@ -596,6 +597,27 @@ image release.
 ### Push changes
 
 Run `scripts/helm_upgrade.sh -s=PATH_TO_SECRETS.yaml` to deploy!
+
+### Update `options.json`
+
+The `options.json` file lists the okpy paths where student submissions should be sent. It can be viewed publicly at [https://storage.googleapis.com/comp141-public/options.json]. It needs to be updated to show the current instructors of the course, and to use the current semester.
+
+Example contents:
+
+```
+{
+	"Cowan": "rhodes/cs141-cowan/fa24",
+	"King": "rhodes/cs141-king/fa24",
+	"Welsh": "rhodes/cs141-welsh/fa24"
+}
+```
+
+Process for updating:
+
+1. Download the current `options.json` file: `gcloud storage cp gs://comp141-public/options.json .`.
+2. Edit the downloaded `options.json` file.
+3. Upload the modified `options.json` file: `gcloud storage cp options.json gs://comp141-public/options.json`.
+4. Check that `options.json` has been updated by navigating to [https://storage.googleapis.com/comp141-public/options.json].
 
 # Troubleshooting and Administration
 
