@@ -22,7 +22,7 @@ singleuser:
     name: gcr.io/rhodes-cs/nb_server_comp141
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2024_06_11rc00
+    tag: 2026_01_07rc01
   # TODO: support different images
   # e.g.,
   # profileList:
@@ -75,8 +75,8 @@ singleuser:
           [
             "sh",
             "-c", 
-            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-fa24 main comp141-fa24 --skip_rename --retry_merge \
-             || gitpuller https://github.com/Rhodes-CS-Department/comp141-fa24 main comp141-fa24 ; } 2>&1 | tee -a /tmp/startup_log",
+            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-sp26 main comp141-sp26 --skip_rename --retry_merge \
+             || gitpuller https://github.com/Rhodes-CS-Department/comp141-sp26 main comp141-sp26 ; } 2>&1 | tee -a /tmp/startup_log",
           ]
 
 cull:
