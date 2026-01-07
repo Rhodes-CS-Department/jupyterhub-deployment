@@ -16,7 +16,7 @@ USER $NB_UID
 # Install pre-v.7 Jupyter notebook.
 # This is necessary for jupyter_contrib_nbextensions to work.
 # The nbclassic package no longer works with jupyter_contrib_nbextensions.
-RUN pip install --no-cache-dir notebook==6.5.5
+RUN pip install --no-cache-dir notebook==6.5.6
 
 # Required libraries for 141
 
