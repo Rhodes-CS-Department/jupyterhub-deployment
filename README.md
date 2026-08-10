@@ -344,7 +344,8 @@ for more info.
 ## Configure your local environment for administration
 
 1. Install `gcloud` via its [install page](https://cloud.google.com/sdk/install)
-   and log in to the Rhodes CS project.
+   and log in to the Rhodes CS project. Also install the required
+   [gke-gcloud-auth-plugin](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/cluster-access-for-kubectl#install_plugin).
 
    ```
    gcloud init
@@ -367,7 +368,7 @@ for more info.
 1. Give your account permissions to perform all admin actions necessary by
    running `./scripts/cluster_permissions.sh your-google-account` (__one
    time__).
-1. Install [Docker](https://hub.docker.com/editions/community/).
+1. Install [Docker](https://docs.docker.com/engine/install/).
 1. Run `gcloud auth configure-docker` in order to be able to push to `gcr.io`.
 1. Install [Helm](https://helm.sh) following the instruction
    [here](https://helm.sh/docs/intro/install/), or on MacOS, run `brew install
