@@ -21,10 +21,10 @@ RUN pip install --no-cache-dir ipyevents
 RUN pip install --no-cache-dir jupyter-ui-poll
 RUN pip install --no-cache-dir nbgitpuller
 
-RUN pip install --no-cache-dir okpy
-
-# okpy pins an old urllib3; we need to upgrade for the Docker image to run.
-RUN pip install --no-cache-dir urllib3 --upgrade
+# We use a forked okpy. Upstream pins every dependency to an exact version,
+# which conflicts with Jupyter 7 and pulls in pytutor, which fails on Python
+# >= 3.12. The fork only relaxes those pins; client/ is unmodified.
+RUN pip install --no-cache-dir git+https://github.com/Rhodes-CS-Department/ok-client.git@rhodes
 
 # Install RISE for slideshows
 RUN pip install --no-cache-dir RISE
