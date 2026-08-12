@@ -30,7 +30,7 @@ RUN pip install --no-cache-dir git+https://github.com/Rhodes-CS-Department/ok-cl
 RUN pip install --no-cache-dir RISE
 
 # Install COMP141 libraries
-RUN pip install --no-cache-dir git+https://github.com/Rhodes-CS-Department/comp141-libraries.git
+RUN pip install --no-cache-dir git+https://github.com/Rhodes-CS-Department/comp141-libraries.git@jupyter7-testing
 
 # Additional Extensions
 RUN pip install --no-cache-dir jupyterlab_code_formatter
