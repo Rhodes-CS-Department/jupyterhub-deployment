@@ -60,7 +60,7 @@ singleuser:
   defaultUrl: /tree/
   extraEnv:
     # default to old server app.
-    JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
+    # JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
     # sorry.
     EDITOR: "vim"
   # Synchronize the libraries repository.
@@ -75,8 +75,7 @@ singleuser:
           [
             "sh",
             "-c", 
-            "{ gitpuller https://github.com/Rhodes-CS-Department/comp141-sp26 main comp141-sp26 --skip_rename --retry_merge \
-             || gitpuller https://github.com/Rhodes-CS-Department/comp141-sp26 main comp141-sp26 ; } 2>&1 | tee -a /tmp/startup_log",
+            "gitpuller https://github.com/Rhodes-CS-Department/comp141-sp26 main comp141-sp26 2>&1 | tee -a /tmp/startup_log",
           ]
 
 cull:
@@ -99,13 +98,10 @@ hub:
       - kirlinp@rhodes.edu
       - larkinsb@rhodes.edu
       - sandersb@rhodes.edu
-      - welshc@rhodes.edu
-      - catie.welsh@gmail.com
       - betswms@gmail.com
       - pkirlin@gmail.com
-      - cowanj@rhodes.edu
-      - kingj2@rhodes.edu
       - mcevilyg@rhodes.edu
+      - xuh@rhodes.edu
     GenericOAuthenticator:
       allow_all: true
       authorize_url: https://rhodes.onelogin.com/oidc/2/auth
