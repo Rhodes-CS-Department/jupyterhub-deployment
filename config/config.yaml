@@ -22,7 +22,7 @@ singleuser:
     name: gcr.io/rhodes-cs/nb_server_comp141
     # When upgrading the docker image, update the tag.
     # Tags should be in the namespace YYYY_MM_DDrcVV
-    tag: 2026_01_07rc01
+    tag: 2026_08_13rc00
   # TODO: support different images
   # e.g.,
   # profileList:
