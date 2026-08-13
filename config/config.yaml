@@ -53,28 +53,18 @@ singleuser:
     capacity: 5Gi
     dynamic:
       storageClass: jupyterhub-user-pd
-  # default to pre-JupyterLab interface.
-  # TODO(langm): Update to jupyter_server.serverapp.ServerApp and use
-  #              nbclassic to reskin the UI. See documentation:
-  #              https://z2jh.jupyter.org/en/stable/jupyterhub/customizing/user-environment.html#use-classic-notebook-by-default
   defaultUrl: /tree/
   extraEnv:
-    # default to old server app.
-    # JUPYTERHUB_SINGLEUSER_APP: "notebook.notebookapp.NotebookApp"
     # sorry.
     EDITOR: "vim"
   # Synchronize the libraries repository.
   lifecycleHooks:
     postStart:
       exec:
-        # Note that the gitpuller command below depends on our nbgitpuller fork,
-        # as the flags do not exist in the upstream repository. If we choose to
-        # revert to the default version, we must update the gitpuller command
-        # below to elide the flags.
         command:
           [
             "sh",
-            "-c", 
+            "-c",
             "gitpuller https://github.com/Rhodes-CS-Department/comp141-sp26 main comp141-sp26 2>&1 | tee -a /tmp/startup_log",
           ]
 
