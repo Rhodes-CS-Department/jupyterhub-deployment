@@ -53,7 +53,7 @@ singleuser:
     capacity: 5Gi
     dynamic:
       storageClass: jupyterhub-user-pd
-  defaultUrl: /tree/
+  defaultUrl: /lab
   extraEnv:
     # sorry.
     EDITOR: "vim"
